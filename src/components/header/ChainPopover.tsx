@@ -8,7 +8,7 @@ import Image from 'next/image';
 import CustomPopover from '../popover/CustomPopover';
 import Iconify from '../common/Iconify';
 import { usePopover } from '../popover';
-import { CHAIN_CONFIGS, CHAIN_LIST } from '@/configs/chains';
+import { CHAIN_CONFIGS, CHAIN_LIST } from '@/configs/blockchain';
 import ChainItem from './ChainItem';
 
 export default function ChainPopover() {

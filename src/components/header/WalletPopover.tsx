@@ -16,7 +16,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import TabPanel from '@mui/lab/TabPanel';
 import { alpha } from '@mui/material/styles';
-import { CHAIN_CONFIGS } from '@/configs/chains';
+import { CHAIN_CONFIGS } from '@/configs/blockchain';
 
 export default function WalletPopover() {
   const popover = usePopover();
