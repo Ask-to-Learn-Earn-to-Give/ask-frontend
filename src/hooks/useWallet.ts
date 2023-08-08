@@ -78,6 +78,11 @@ export default function useWallet(): IWallet {
     });
 
     window.ethereum.on('chainChanged', (networkId: string) => {
+      const network_ = NETWORKS.find(
+        (network) => network.chainId === BigInt(networkId)
+      );
+
+      setIsWrongNetwork(!network_);
       switchNetwork(BigInt(networkId));
     });
 
