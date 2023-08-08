@@ -6,11 +6,12 @@ type Props = {
   name: string;
   symbol: string;
   selected: boolean;
+  onClick: () => void;
 };
 
-export default function ChainItem({ name, symbol, selected }: Props) {
+export default function ChainItem({ name, symbol, selected, onClick }: Props) {
   return (
-    <Button sx={{ width: '100%' }}>
+    <Button sx={{ width: '100%' }} onClick={onClick}>
       <Stack
         direction="row"
         justifyContent="space-between"

@@ -1,7 +1,8 @@
 export type Network = {
   name: string;
-  chainId: string;
+  chainId: bigint;
   rpcUrl: string;
+  symbol: string;
 };
 
 export type Token = {
@@ -13,13 +14,15 @@ export type Token = {
 export const NETWORKS: Network[] = [
   {
     name: 'Ethereum',
-    chainId: '1',
-    rpcUrl: 'https://mainnet.infura.io/v3/[key]',
+    symbol: 'ETH',
+    chainId: 11155111n,
+    rpcUrl: 'https://sepolia.infura.io/v3/1482a3d2c4d74bc28e2192378e0274fb',
   },
   {
     name: 'Klaytn',
-    chainId: '8217',
-    rpcUrl: 'https://node-api.klaytnapi.com/v1/klaytn',
+    symbol: 'KLAY',
+    chainId: 1001n,
+    rpcUrl: 'https://public-node-api.klaytnapi.com/v1/baobab',
   },
 ];
 

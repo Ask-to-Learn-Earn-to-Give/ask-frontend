@@ -6,6 +6,7 @@ import { primaryFont } from '@/theme/typography';
 import MotionLazy from '@/components/animation/MotionLazy';
 import { SettingsProvider } from '@/components/settings';
 import { Header } from '@/components/header';
+import ClientProvider from '@/contexts/client/ClientProvider';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -26,7 +27,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           <ThemeProvider>
             <MotionLazy>
               <SettingsDrawer />
-              {children}
+              <ClientProvider>{children}</ClientProvider>
             </MotionLazy>
           </ThemeProvider>
         </SettingsProvider>

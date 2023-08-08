@@ -1,4 +1,4 @@
-import { truncateWalletAddress } from '@/utils';
+import { toEtherString, truncateWalletAddress } from '@/utils';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
@@ -10,28 +10,38 @@ import Image from 'next/image';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import ChainPopover from './ChainPopover';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { TabContext } from '@mui/lab';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import TabPanel from '@mui/lab/TabPanel';
-import { alpha } from '@mui/material/styles';
-import { CHAIN_CONFIGS } from '@/configs/blockchain';
+import { useClient } from '@/contexts/client/ClientContext';
+import { TOKENS } from '@/configs/blockchain';
 
 export default function WalletPopover() {
   const popover = usePopover();
   const [tab, setTab] = useState('assets');
 
-  const truncatedAddress = truncateWalletAddress(
-    '0x1234567890123456789012345678901234567890'
-  );
+  const { wallet } = useClient();
+
+  const address = useMemo(() => {
+    if (!wallet.address) return '';
+    return truncateWalletAddress(wallet.address);
+  }, [wallet.address]);
+
+  const assets = useMemo(() => {
+    return Object.keys(wallet.assets).map((symbol) => ({
+      ...TOKENS[symbol],
+      balance: toEtherString(wallet.assets[symbol].balance),
+    }));
+  }, [wallet.assets]);
 
   return (
     <>
       <Button
         variant="outlined"
         size="small"
-        color="primary"
+        color={wallet.isWrongNetwork ? 'error' : 'primary'}
         onClick={popover.onOpen}
       >
         <Iconify icon="solar:wallet-bold-duotone" sx={{ mr: { sm: 1 } }} />
@@ -39,13 +49,13 @@ export default function WalletPopover() {
         <Typography
           variant="body2"
           sx={{
-            color: 'primary.dark',
+            color: wallet.isWrongNetwork ? 'error.dark' : 'primary,dark',
             letterSpacing: '0.5px',
             display: { xs: 'none', sm: 'block' },
           }}
           noWrap
         >
-          {truncatedAddress}
+          {wallet.isWrongNetwork ? 'Wrong Network' : address}
         </Typography>
       </Button>
       <CustomPopover
@@ -70,7 +80,7 @@ export default function WalletPopover() {
                   noWrap
                   sx={{ letterSpacing: '0.5px', color: 'text.secondary' }}
                 >
-                  {truncatedAddress}
+                  {address}
                 </Typography>
               </Button>
             </Tooltip>
@@ -117,51 +127,53 @@ export default function WalletPopover() {
             </Tabs>
             <TabPanel value="assets" sx={{ px: 0 }}>
               <Stack>
-                <Button sx={{ px: 2, py: 1 }}>
-                  <Stack direction="row" sx={{ width: '100%' }}>
-                    <Box
-                      sx={{
-                        p: '8px',
-                        mr: 2,
-                        height: 40,
-                        width: 40,
-                        borderRadius: '50%',
-                        bgcolor: CHAIN_CONFIGS['ETH'].color,
-                      }}
-                    >
-                      <Image
-                        src="assets/icons/coins/eth.svg"
-                        width={24}
-                        height={24}
-                        alt="eth"
-                      />
-                    </Box>
-                    <Box>
-                      <Typography
-                        variant="subtitle2"
-                        align="left"
-                        sx={{ letterSpacing: '0.5px' }}
-                        noWrap
+                {assets.map(({ symbol, color, name, balance }) => (
+                  <Button key={symbol} sx={{ px: 2, py: 1 }}>
+                    <Stack direction="row" sx={{ width: '100%' }}>
+                      <Box
+                        sx={{
+                          p: '8px',
+                          mr: 2,
+                          height: 40,
+                          width: 40,
+                          borderRadius: '50%',
+                          bgcolor: color,
+                        }}
                       >
-                        Ethereum
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        align="left"
-                        sx={{ color: 'text.secondary' }}
-                        noWrap
-                      >
-                        1.234567 ETH
-                      </Typography>
-                    </Box>
-                    <Box sx={{ flexGrow: 1 }} />
-                    <Box>
-                      <Typography variant="body1" align="right">
-                        $1,234.56
-                      </Typography>
-                    </Box>
-                  </Stack>
-                </Button>
+                        <Image
+                          src={`assets/icons/coins/${symbol.toLowerCase()}.svg`}
+                          width={24}
+                          height={24}
+                          alt="eth"
+                        />
+                      </Box>
+                      <Box>
+                        <Typography
+                          variant="subtitle2"
+                          align="left"
+                          sx={{ letterSpacing: '0.5px' }}
+                          noWrap
+                        >
+                          {name}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          align="left"
+                          sx={{ color: 'text.secondary' }}
+                          noWrap
+                        >
+                          {balance} {symbol}
+                        </Typography>
+                      </Box>
+                      <Box sx={{ flexGrow: 1 }} />
+                      <Box>
+                        <Typography variant="body1" align="right">
+                          $1,234.56
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  </Button>
+                ))}
               </Stack>
             </TabPanel>
             <TabPanel value="something">Item Two</TabPanel>

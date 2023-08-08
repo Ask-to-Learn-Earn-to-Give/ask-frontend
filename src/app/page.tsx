@@ -1,16 +1,34 @@
 'use client';
 
-import { useSettingsContext } from '@/components/settings/contexts/SettingsContext';
+import { useClient } from '@/contexts/client/ClientContext';
 import { Box, Button, Typography } from '@mui/material';
+import Link from 'next/link';
 
 export default function Home() {
-  const { onToggle } = useSettingsContext();
+  const { wallet } = useClient();
+
   return (
     <Box>
-      <Button variant="contained" color="primary" onClick={onToggle}>
-        Click me
-      </Button>
-      <Typography variant="h1">Hello world</Typography>
+      {wallet.isConnected ? (
+        <Button
+          variant="outlined"
+          size="small"
+          color="primary"
+          component={Link}
+          href="/dapp"
+        >
+          Go to dapp
+        </Button>
+      ) : (
+        <Button
+          variant="outlined"
+          size="small"
+          color="primary"
+          onClick={() => wallet.connect()}
+        >
+          Connect wallet
+        </Button>
+      )}
     </Box>
   );
 }

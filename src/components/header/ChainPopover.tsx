@@ -8,23 +8,25 @@ import Image from 'next/image';
 import CustomPopover from '../popover/CustomPopover';
 import Iconify from '../common/Iconify';
 import { usePopover } from '../popover';
-import { CHAIN_CONFIGS, CHAIN_LIST } from '@/configs/blockchain';
+import { NETWORKS } from '@/configs/blockchain';
 import ChainItem from './ChainItem';
+import { useClient } from '@/contexts/client/ClientContext';
 
 export default function ChainPopover() {
   const popover = usePopover();
+  const { wallet } = useClient();
 
   return (
     <>
       <Button variant="outlined" size="small" onClick={popover.onOpen}>
         <Image
-          src={'assets/icons/coins/eth.svg'}
+          src={`assets/icons/coins/${wallet.network?.symbol.toLowerCase()}.svg`}
           width={16}
           height={16}
-          alt="Ethereum"
+          alt={wallet.network?.name || ''}
         />
         <Typography variant="subtitle2" sx={{ mx: 1, color: 'text.secondary' }}>
-          Ethereum
+          {wallet.network?.name}
         </Typography>
         <IconButton size="small">
           <Iconify icon="solar:alt-arrow-down-bold" />
@@ -43,12 +45,13 @@ export default function ChainPopover() {
           >
             Switch chain
           </Typography>
-          {CHAIN_LIST.map((symbol) => (
+          {NETWORKS.map(({ name, symbol, chainId }) => (
             <ChainItem
               symbol={symbol}
-              name={CHAIN_CONFIGS[symbol].name}
-              selected={symbol == 'ETH'}
+              name={name}
+              selected={symbol == wallet.network?.symbol}
               key={symbol}
+              onClick={() => wallet.switchNetwork(chainId)}
             />
           ))}
         </Box>
