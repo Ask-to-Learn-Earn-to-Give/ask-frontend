@@ -1,34 +1,73 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## NFT Marketplace
 
-## Getting Started
+This is a decentralized NFT marketplace built on the Ethereum blockchain. It allows users to create, mint, and sell NFTs. The marketplace also features an auction function, allowing users to bid on NFTs.
 
-First, run the development server:
+API Repo: https://gitlab.com/sontm.ase/nft_api
 
-```bash
+Contract Repo: https://gitlab.com/sontm.ase/nft-contract-test
+
+Youtube review function: https://youtu.be/dTzab4Ch3CI
+
+Deploy: https://sontm-nft.vercel.app/
+
+## Features
+
+API of user information
+
+Solidity contract with testing
+
+NFT marketplace function
+
+Auction function
+
+Many page components
+
+Sepolia testnet
+
+Getting Started
+
+To get started, you will need to install the following dependencies:
+
+npm install
+
+Once you have installed the dependencies, you can start the development server by running the following command:
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The development server will be started at http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Usage
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+To create an NFT, you will need to provide the following information:
 
-## Learn More
+The NFT's name
 
-To learn more about Next.js, take a look at the following resources:
+The NFT's description
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The NFT's image
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+The NFT's price
 
-## Deploy on Vercel
+Once you have created an NFT, you can list it for sale on the marketplace. To do this, you will need to provide the following information:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The NFT's ID
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+The NFT's starting price
+
+## Testing
+
+The NFT marketplace contract has been tested using the foundry framework. To run the tests, you can run the following command:
+
+make test -vvvv
+
+## Contributing
+
+Contributions are welcome! Please open a pull request if you have any changes or improvements.
+
+## License
+
+The NFT marketplace is licensed under the MIT License.
+
+## Roadmap
+
+API feature of user information: follow, like seller, nft music display, sorting/filtering, seller rating
