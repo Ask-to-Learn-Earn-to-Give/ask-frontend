@@ -1,0 +1,40 @@
+/* CommentBox.module.css */
+.commentBox {
+    width: 50%;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  .comment{
+    border-bottom: 1px solid;
+    margin: 1rem 0rem;
+
+  }
+.commentBox_button {
+    width: 100%;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+.showbox_container_userInfor{
+    display: flex;
+    justify-content: space-between;
+}
+.showbox_container_userInfor_box{
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+}
+.showbox_container_userInfor_selecbox {
+    display: flex;
+    align-items: center;
+}
+.showbox_container_userInfor_img_img  {
+border-radius: 100%;
+}
+.showbox_container_userInfor_userName {
+    margin:0 1rem;
+}
+.showbox_container_userComment{
+    margin: 1rem 5rem;
+}
