@@ -7,7 +7,7 @@ import images from "../img";
 // import data from contract
 import { ProblemSolverContext } from "../Context/ProblemSolverContext";
 const create = () => {
-  const { uploadToIPFS } = useContext(ProblemSolverContext);
+  const { uploadToIPFS, CreateProblem } = useContext(ProblemSolverContext);
   // tabs
 
   return (
@@ -29,7 +29,7 @@ const create = () => {
         <div className={Style.create_box_form}>
           {" "}
           <div className={Style.uploadNFT_box_form}>
-            <Create uploadToIPFS={uploadToIPFS} />
+            <Create uploadToIPFS={uploadToIPFS} CreateProblem={CreateProblem} />
           </div>
         </div>
       </div>

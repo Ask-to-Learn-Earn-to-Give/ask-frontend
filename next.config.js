@@ -14,10 +14,13 @@ const nextConfig = {
     // infura
     PROJECT_ID: "2QXX7CVuy55vGeSCi2ntWSx39lg",
     PROJECT_SECRET_KEY: "9ab74124c25fdacc432843ec37076620",
-    SUB_DOMAIN: "nftsontm.infura-ipfs.io",
+    SUB_DOMAIN: "http://nftsontm.infura-ipfs.io",
     // sepolia url
     SEPOLIA_RPC_URL:
       "https://eth-sepolia.g.alchemy.com/v2/rDuqRyN9U6tPHDbd2_PMJ7KKa04Dtmbu",
+    // sepolia url
+    BAO_BAB:
+      "https://klaytn-baobab-rpc.allthatnode.com:8551/JDYwYnv5fTvAmwy3KJckqdZMyzQ7t9J4",
   },
 };
 

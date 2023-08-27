@@ -38,7 +38,7 @@ const account = () => {
 
           {userData?.length && userData[0]?.images ? (
             <Image
-              src={`https://${userData[0]?.images}`}
+              src={userData[0]?.images}
               alt="nft image"
               width={200}
               height={200}
@@ -46,7 +46,7 @@ const account = () => {
             />
           ) : fileUrl ? (
             <Image
-              src={`https://${fileUrl}`}
+              src={fileUrl}
               alt="nft image"
               width={200}
               height={200}

@@ -6,10 +6,13 @@ import {
   Brand,
   Spinner,
   Title,
+  Slider,
+  Subscribe,
 } from "../components/componentsindex";
+import { PropCard } from "../subPages/collectionPage/collectionIndex";
 import { ProblemSolverContext } from "../Context/ProblemSolverContext";
 const Home = () => {
-  const { checkIfWalletConnected } = useContext(ProblemSolverContext);
+  const { checkIfWalletConnected, propData } = useContext(ProblemSolverContext);
   useEffect(() => {
     checkIfWalletConnected();
   }, []);
@@ -19,9 +22,21 @@ const Home = () => {
       <HeroSection />
       <Title heading="Start with easy step" paragraph="" />
       <Service />
-      <Title heading="Find the Expert now" paragraph="" />
+      <Title
+        heading="Discovery "
+        paragraph="Help our user solve they problem to get money now!"
+      />
+      <div className={Style.PropCard}>
+        {propData && propData.length == 0 ? (
+          <Spinner />
+        ) : (
+          <PropCard PropData={propData} />
+        )}
+      </div>
 
+      <Slider />
       <Brand />
+      <Subscribe />
     </div>
   );
 };

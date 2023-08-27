@@ -1,24 +1,43 @@
 /* CommentBox.module.css */
 .commentBox {
-    width: 50%;
+    width: 100%;
     margin: 0 auto;
+    overflow-wrap: break-word;
     font-family: Arial, sans-serif;
+    margin-top: 3rem;
+
   }
   
   .comment{
-    border-bottom: 1px solid;
     margin: 1rem 0rem;
+    background-color: var(--main-bg-color);
+    border: 1px solid var(--icons-color);
+    border-radius: 20px;
+    padding: 1rem 2rem;
 
+  }
+  .showbox {
+    max-height: 800px;
+    overflow-y: scroll;
+    padding: 0.7rem;
+  }
+  .post_bid{
+    margin: 3rem 0rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px dashed var(--icons-color);
   }
 .commentBox_button {
     width: 100%;
-    margin-top: 1rem;
+    margin-top: 2rem;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
+    align-items: center;
 }
+
 .showbox_container_userInfor{
     display: flex;
     justify-content: space-between;
+    /* border-bottom: 1px dashed var(--icons-color); */
 }
 .showbox_container_userInfor_box{
     display: flex;
@@ -36,5 +55,19 @@ border-radius: 100%;
     margin:0 1rem;
 }
 .showbox_container_userComment{
-    margin: 1rem 5rem;
+    margin: 1rem 1rem;
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px dashed var(--icons-color);
+    white-space: pre-wrap;
 }
+.textarea_container textarea {
+    white-space: pre-wrap;
+  }
+  .showbox_container_userInfor_price h3 {
+    color: blue;
+  }
+  .post_date{
+    display: flex;
+    justify-content: flex-end;
+  }

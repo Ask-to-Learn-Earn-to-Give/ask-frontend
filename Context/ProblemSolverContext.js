@@ -5,12 +5,13 @@ import Router from "next/router";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { create as ipfsHttpClient } from "ipfs-http-client";
-import { NFTMarketplaceAddress, NFTMarketplaceABI } from "./constants";
+import { ProblemSolverAddress, ProblemSolverABI } from "./constants";
 import useAxios from "../hook/useAxios";
 import { toast } from "react-toastify";
 
 // infura register
 const projectID = process.env.PROJECT_ID;
+const baobab = process.env.BAO_BAB;
 const projectSecretKey = process.env.PROJECT_SECRET_KEY;
 const subdomain = process.env.SUB_DOMAIN;
 const auth = `Basic ${Buffer.from(`${projectID}:${projectSecretKey}`).toString(
@@ -24,14 +25,9 @@ const client = ipfsHttpClient({
     authorization: auth,
   },
 });
-
 // fetch smart contract
 const fetchContract = (signerOrProvider) =>
-  new ethers.Contract(
-    NFTMarketplaceAddress,
-    NFTMarketplaceABI,
-    signerOrProvider
-  );
+  new ethers.Contract(ProblemSolverAddress, ProblemSolverABI, signerOrProvider);
 //  connecting with smart contract
 const connectingWithSmartContract = async () => {
   try {
@@ -50,10 +46,14 @@ export const ProblemSolverProvider = ({ children }) => {
   // usestate
   const [currentAccount, setCurrentAccount] = useState("");
   const [userData, setUserData] = useState();
+  const [data, setData] = useState([]);
+  const [allUser, setAllUser] = useState("");
+  const [propData, setPropData] = useState([]);
   const { operation: getUserExis, data: news } = useAxios(
     `/api/v1/users?walletAddress=${currentAccount}`,
     "GET"
   );
+  const { operation: getAllUser, data: get } = useAxios(`/api/v1/users`, "GET");
   const router = useRouter();
   // check if wallet connected
   const checkIfWalletConnected = async () => {
@@ -102,6 +102,7 @@ export const ProblemSolverProvider = ({ children }) => {
   useEffect(() => {
     currentWallet();
   }, []);
+  //----------------------------------------------------
   // get current userData in database
   useEffect(() => {
     if (currentAccount) {
@@ -111,6 +112,51 @@ export const ProblemSolverProvider = ({ children }) => {
     }
   }, [currentAccount]);
 
+  // fetch all data from database
+  useEffect(() => {
+    getAllUser().then((response) => {
+      setAllUser(response?.data.user);
+    });
+  }, []);
+  // fetch all data from blockchain
+  useEffect(() => {
+    fetchAllProblems().then((item) => {
+      setData(item);
+    });
+  }, []);
+  useEffect(() => {
+    if (allUser && data) {
+      const updateData = mergeArrays(data, allUser);
+      setPropData(updateData);
+    }
+  }, [allUser, data]);
+  // set mapping with db with blockchain.
+  function mergeArrays(arr1, arr2) {
+    const map = new Map(
+      arr2.map((obj) => [obj.walletAddress.toLowerCase(), obj])
+    );
+    const merged = arr1.map((obj1) => {
+      const obj2 = map.get(obj1.walletAddress.toLowerCase());
+      if (!obj2)
+        return {
+          ...obj1,
+          description: "",
+          email: "",
+          facebook: "",
+          images: "",
+          instagram: "",
+          name: "",
+          twitter: "",
+          website: "",
+        };
+      return { ...obj1, ...obj2 };
+    });
+    return merged;
+  }
+  console.log("allUser", allUser);
+  console.log("data", data);
+  console.log("propData", propData);
+  //----------------------------------------------------
   // upload to ipfs function
   const uploadToIPFS = async (file) => {
     try {
@@ -121,7 +167,133 @@ export const ProblemSolverProvider = ({ children }) => {
       toast.error("Error uploading to IPFS");
     }
   };
+  //----------------------------------------------------
+  // smart contract function
+  // create problem
+  const CreateProblem = async (title, image, description) => {
+    if (!title || !description) console.log("data missing");
+    try {
+      const contract = await connectingWithSmartContract();
+      const transaction = await contract.createProblem(
+        title,
+        image,
+        description
+      );
+      await transaction.wait();
+      console.log("Create successfully");
 
+      router.push("/searchPage");
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  // fetch problem
+  const fetchAllProblems = async () => {
+    try {
+      const provider = new ethers.providers.JsonRpcProvider(baobab);
+      const contract = fetchContract(provider);
+      const data = await contract.getAllProblems();
+      const items = await Promise.all(
+        data.map(
+          async ({
+            id,
+            title,
+            image,
+            description,
+            user,
+            selectedExpert,
+            cost,
+            solved,
+            markedAsSolved,
+            selecting,
+          }) => {
+            return {
+              id: id.toString(),
+              title,
+              problemImage: image,
+              expertDescription: description,
+              walletAddress: user,
+              selectedExpert,
+              cost: cost.toString(),
+              solved,
+              markedAsSolved,
+              selecting,
+            };
+          }
+        )
+      );
+      return items;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // place a bid price
+  const PlaceBid = async (problemId, amount, comment) => {
+    if (!problemId || !amount || !comment) console.log("data missing");
+    try {
+      const contract = await connectingWithSmartContract();
+      const transaction = await contract.placeBid(problemId, amount, comment);
+      await transaction.wait();
+      console.log("Place your bid  successfully");
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  // get exert id
+  const getExpertBidId = async (problemId, _expert) => {
+    if (!problemId || !_expert) console.log("data missing");
+    try {
+      const contract = await connectingWithSmartContract();
+      const transaction = await contract.getExpertBidId(problemId, _expert);
+      await transaction.wait();
+      console.log("Get Bid Id  successfully");
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  // function selected expert
+  const selectedExpert = async (problemId, _bidId) => {
+    if (!problemId || !_bidId) console.log("data missing");
+    try {
+      const contract = await connectingWithSmartContract();
+      const transaction = await contract.selectExpert(problemId, _bidId);
+      await transaction.wait();
+      console.log("Selected expert successfully");
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  // function get all bidder
+  const getBidders = async (problemId) => {
+    if (!problemId) console.log("data missing");
+    try {
+      const contract = await connectingWithSmartContract();
+      const data = await contract.getBids(problemId);
+      const items = await Promise.all(
+        data.map(
+          async ({
+            bidId,
+            problemId,
+            expert,
+            bidAmount,
+            expertDescription,
+          }) => {
+            return {
+              bidId: bidId.toString(),
+              problemId: problemId.toString(),
+              expert,
+              bidAmount: bidAmount.toString(),
+              expertDescription,
+            };
+          }
+        )
+      );
+      return items;
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
   return (
     <ProblemSolverContext.Provider
       value={{
@@ -130,6 +302,16 @@ export const ProblemSolverProvider = ({ children }) => {
         uploadToIPFS,
         currentAccount,
         currentWallet,
+        CreateProblem,
+        fetchAllProblems,
+        PlaceBid,
+        getExpertBidId,
+        selectedExpert,
+        getBidders,
+        userData,
+        data,
+        allUser,
+        propData,
       }}
     >
       {children}

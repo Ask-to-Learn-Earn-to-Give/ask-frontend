@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 
 //INTERNAL IMPORT
 import Style from "../styles/author.module.css";
-import { Banner, NFTCardTwo } from "../subPages/collectionPage/collectionIndex";
+import { Banner } from "../subPages/collectionPage/collectionIndex";
 import { Brand, Title, Spinner } from "../components/componentsindex";
 import FollowerTabCard from "../components/FollowerTab/FollowerTabCard/FollowerTabCard";
 import images from "../img";
@@ -74,8 +74,6 @@ const profile = () => {
         like={like}
         follower={follower}
         following={following}
-        nfts={nfts}
-        myNfts={myNfts}
       />
       <Title
         heading="Popular Creators"
