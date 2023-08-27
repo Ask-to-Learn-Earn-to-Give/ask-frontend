@@ -9,9 +9,14 @@ const Discover = ({ currentAccount }) => {
   const router = useRouter();
   const discover = [
     {
-      name: "Search",
+      name: "Discovery",
       link: "searchPage",
       protect: "searchPage",
+    },
+    {
+      name: "Your Profile",
+      link: "profile",
+      protect: "connectWallet",
     },
     {
       name: "Create Question",

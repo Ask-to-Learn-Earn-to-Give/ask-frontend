@@ -1,0 +1,134 @@
+.PropCard{
+    width: 80%;
+    margin:  0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+    margin-bottom: 14rem;
+}
+
+.PropCard_box{
+    display: grid;
+    height: 290px;
+    cursor: pointer;
+    transition: all .3s ease-in;
+    border-radius: 1rem;
+    border: 1px solid var(--icons-color);
+}
+
+.PropCard_box:hover{
+    box-shadow: var(--box-shadow);
+}
+.Container {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem;
+    
+}
+.Container_Top{
+    flex-basis: 100%;
+    flex-wrap: wrap;
+
+}
+.PropCard_box_detail_top {
+    display: flex;
+    justify-content: space-between;
+    width: 550px;
+    margin-right:1rem;
+}
+.PropCard_box_detail_bot{
+display: flex;
+width: 550px;
+}
+.PropCard_box_detail_icon {
+width: 550px;
+
+}
+.PropCard_box_detail_title p{
+    font-size: 1.5rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 350px;
+    max-width: 350px;
+}
+.PropCard_box_detail_title {    
+    margin: 0.5rem 1rem;
+    width: 350px;
+    max-width: 350px;
+}
+.PropCard_box_detail_description p {
+    font-size: 1rem;
+    width: 350px;
+    max-width: 350px;
+    height:65px ;
+    max-height:65px ;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    text-overflow: ellipsis;
+
+}
+.PropCard_box_detail_Status_unsolved {
+    padding: 0.4rem 01rem;
+    background-color:    rgba(115, 123, 131, 0.16);
+    border-radius: 5px;
+    font-weight: 500;
+    color: rgb(64, 69, 73);}
+.PropCard_box_detail_Status_solved {
+    padding: 0.4rem 0.7rem;
+    background-color:  rgba(0, 184, 217, 0.16);
+    border-radius: 10px;
+    font-weight: 500;
+    color: rgb(0, 108, 156)}
+.PropCard_box_detail_bot_image{
+    width: 30%;
+}
+.PropCard_box_detail_bot_content{
+    width: 70%;
+}
+.PropCard_box_detail_bot_image_img{
+    border-radius: 10px;
+}
+
+.PropCard_box_User{
+    display: flex;
+    flex-direction: column;
+    border-left: 1px dotted;
+    align-items: center;
+    width: 100%;
+    padding-left: 21px;
+
+}
+.PropCard_box_User h4 {
+    margin: 0.3rem 0rem ;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100px;
+    max-width: 100px;
+}
+.PropCard_box_User p {
+    white-space: nowrap;
+    margin: 0.3rem auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100px;
+    max-width: 100px;
+}
+.PropCard_box_User_img_img  {
+    border-radius: 50%;
+}
+@media screen and (max-width: 35em) {
+    .PropCard{
+        width: 90%;
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .PropCard{
+        width: 90%;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

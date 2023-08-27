@@ -178,7 +178,7 @@ const NavBar = () => {
                 )}{" "}
                 {userData && userData[0]?.images && (
                   <Image
-                    src={`https://${userData[0]?.images}`}
+                    src={userData[0]?.images}
                     alt="Profile"
                     width={40}
                     height={40}
@@ -189,7 +189,7 @@ const NavBar = () => {
 
                 {userData?.length && userData[0]?.images ? (
                   <Image
-                    src={`https://${userData[0]?.images}`}
+                    src={userData[0]?.images}
                     alt="Profile"
                     width={40}
                     height={40}

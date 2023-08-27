@@ -1,0 +1,19 @@
+.container{
+    width: 50%;
+    margin: 0 auto;  
+    background-color: rgb(247, 245, 245);
+    padding: 4rem;
+    border-radius: 20px;
+}
+.back p{
+    font-weight: 600;
+    cursor: pointer;
+
+  }
+  .back{
+    width: 60%;
+    margin:2rem auto;  
+    display: flex;
+    justify-content: space-between;
+  }
+

@@ -15,6 +15,7 @@ const DropZone = ({
   category,
   uploadToIPFS,
   setImage,
+  CreateProblem,
 }) => {
   const [fileUrl, setFileUrl] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -57,39 +58,39 @@ const DropZone = ({
         <Spinner />
       ) : (
         fileUrl && (
-          <aside className={Style.DropZone_box_aside}>
-            <div className={Style.DropZone_box_aside_box}>
-              <Image
-                src={`https://${fileUrl}`}
-                alt="nft image"
-                width={200}
-                height={200}
-              />
+          <>
+            <br />
+            <br />
+            <h1>Preview your post</h1>
+            <aside className={Style.DropZone_box_aside}>
+              <div className={Style.DropZone_box_aside_box}>
+                <Image src={fileUrl} alt="nft image" width={200} height={200} />
 
-              <div className={Style.DropZone_box_aside_box_preview}>
-                <div className={Style.DropZone_box_aside_box_preview_one}>
-                  <p>
-                    <span>Title:</span>
-                    {name || ""}
-                  </p>
-                </div>
+                <div className={Style.DropZone_box_aside_box_preview}>
+                  <div className={Style.DropZone_box_aside_box_preview_one}>
+                    <p>
+                      <span>Title:</span>
+                      {name || ""}
+                    </p>
+                  </div>
 
-                <div className={Style.DropZone_box_aside_box_preview_two}>
-                  <p>
-                    <span>Description:</span>
-                    {description || ""}
-                  </p>
-                </div>
+                  <div className={Style.DropZone_box_aside_box_preview_two}>
+                    <p>
+                      <span>Description:</span>
+                      {description || ""}
+                    </p>
+                  </div>
 
-                <div className={Style.DropZone_box_aside_box_preview_three}>
-                  <p>
-                    <span>Category</span>
-                    {category || ""}
-                  </p>
+                  <div className={Style.DropZone_box_aside_box_preview_three}>
+                    <p>
+                      <span>Category</span>
+                      {category || ""}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </aside>
+            </aside>
+          </>
         )
       )}
     </div>

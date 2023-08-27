@@ -9,13 +9,11 @@ import images from "../../img";
 import { Button } from "../../components/componentsindex";
 import { DropZone } from "../CreatePage/createIndex";
 
-const Create = ({ uploadToIPFS }) => {
+const Create = ({ uploadToIPFS, CreateProblem }) => {
   const [active, setActive] = useState(0);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [fileSize, setFileSize] = useState("");
   const [category, setCategory] = useState(0);
-  const [properties, setProperties] = useState("");
   const [image, setImage] = useState(null);
   const router = useRouter();
   const categoryArry = [
@@ -53,11 +51,10 @@ const Create = ({ uploadToIPFS }) => {
         subHeading="or Browse media on your device"
         name={title}
         description={description}
-        fileSize={fileSize}
         category={category}
-        properties={properties}
         setImage={setImage}
         uploadToIPFS={uploadToIPFS}
+        CreateProblem={CreateProblem}
       />
 
       <div className={Style.upload_box}>
@@ -125,7 +122,7 @@ const Create = ({ uploadToIPFS }) => {
         <div className={Style.upload_box_btn}>
           <Button
             btnName="Create"
-            handleClick={async () => {}}
+            handleClick={async () => CreateProblem(title, image, description)}
             classStyle={Style.upload_box_btn_style}
           />
         </div>

@@ -3,7 +3,6 @@ import React, { useState } from "react";
 //INTERNAL IMPORT
 import Style from "./AuthorNFTCardBox.module.css";
 import images from "../../../img";
-import { NFTCardTwo } from "../../collectionPage/collectionIndex";
 import FollowerTabCard from "../../../components/FollowerTab/FollowerTabCard/FollowerTabCard";
 
 const AuthorNFTCardBox = ({
@@ -16,7 +15,7 @@ const AuthorNFTCardBox = ({
   const followerArray = [
     {
       background: images.creatorbackground1,
-      user: images.user1,
+      user: images.user9,
       seller: "0x70997970C518",
     },
     {
@@ -75,7 +74,6 @@ const AuthorNFTCardBox = ({
   ];
   return (
     <div className={Style.AuthorNFTCardBox}>
-      {like && <NFTCardTwo NFTData={nfts} />}
       {follower && (
         <div className={Style.AuthorNFTCardBox_box}>
           {followerArray.map((el, i) => (

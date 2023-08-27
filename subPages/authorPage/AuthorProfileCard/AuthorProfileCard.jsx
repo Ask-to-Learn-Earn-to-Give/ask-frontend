@@ -53,7 +53,7 @@ const AuthorProfileCard = ({ currentAccount, userData }) => {
         <div className={Style.AuthorProfileCard_box_img}>
           {userData?.length && userData[0]?.images ? (
             <Image
-              src={`https://${userData[0]?.images}`}
+              src={userData[0]?.images}
               className={Style.AuthorProfileCard_box_img_img}
               alt="NFT IMAGES"
               width={220}

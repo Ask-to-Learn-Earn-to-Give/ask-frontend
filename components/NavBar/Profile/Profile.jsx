@@ -25,7 +25,7 @@ const Profile = ({ currentAccount, userData }) => {
         )} */}
         {userData?.length && userData[0]?.images ? (
           <Image
-            src={`https://${userData[0]?.images}`}
+            src={userData[0]?.images}
             alt="user profile"
             width={50}
             height={50}
