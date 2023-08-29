@@ -35,7 +35,6 @@ const searchPage = () => {
       setDataCall(propData);
     }
   };
-  console.log("filtereData", propData);
 
   return (
     <div className={Style.searchPage}>

@@ -6,33 +6,32 @@ import Link from "next/link";
 import Image from "next/image";
 
 const DescriptionDetail = ({ id }) => {
-  const { propData } = useContext(ProblemSolverContext);
+  const { propData, getProblemById } = useContext(ProblemSolverContext);
   const [postDetail, setPostDetail] = useState();
   const router = useRouter();
   useEffect(() => {
-    if (propData) {
-      const detail = getDetailById(propData, id);
-      setPostDetail(detail);
+    if (id) {
+      getDetail(id);
     }
-  }, []);
+  }, [id]);
 
-  function getDetailById(item, _id) {
-    return item.find((obj) => obj.id === _id);
-  }
-  console.log("post detail", postDetail);
+  const getDetail = async (_id) => {
+    const detail = await getProblemById(_id);
+    setPostDetail(detail);
+  };
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h2>{postDetail?.title}</h2>
       </div>
       <div className={styles.body}>
-        <h3>{postDetail?.expertDescription}</h3>
+        <h3>{postDetail?.description}</h3>
       </div>
-      {postDetail?.problemImage ? (
+      {postDetail?.image ? (
         <div className={styles.imageContainer}>
           <Image
             className={styles.image_image}
-            src={postDetail?.problemImage}
+            src={postDetail?.image}
             alt="Problem image"
             objectFit="contain"
             layout="fill"

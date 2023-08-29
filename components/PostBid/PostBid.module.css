@@ -48,6 +48,9 @@
     display: flex;
     align-items: center;
 }
+.showbox_container_userInfor_img {
+  cursor: pointer;
+}
 .showbox_container_userInfor_img_img  {
 border-radius: 100%;
 }

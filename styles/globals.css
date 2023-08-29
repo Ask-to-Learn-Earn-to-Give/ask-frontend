@@ -3,6 +3,7 @@
 
 :root{
   --icons-color: #356d64;
+  --text-background:rgb(247, 245, 245);
   --icons-light-color: #f1cbb6;
   --icons-bg-color: #f8ece0;
   --shadow-dark-color: #f1cbb6;
@@ -30,6 +31,7 @@
   --background: var(--main-bg-color);
   --box-shadow: 1rem 1rem 1rem var(--shadow-dark-color),
   -1rem -1rem 1rem var(--shadow-light-color);
+  --text-background:rgb(247, 245, 245);
 
   --box-shadow-2: 0rem 0rem 0rem var(--shadow-dark-color),
   -.3rem -.3rem 1rem var(--shadow-dark-color)
@@ -46,6 +48,7 @@
   --background: var(--main-bg-color);
   --box-shadow: 1rem 1rem 1rem var(--shadow-dark-color),
   -1rem -1rem 1rem var(--shadow-light-color);
+  --text-background:rgb(247, 245, 245);
 
   --box-shadow-2: 0rem 0rem 0rem var(--shadow-dark-color),
   -.3rem -.3rem 1rem var(--shadow-dark-color)

@@ -13,7 +13,10 @@ const PropCard = ({ PropData }) => {
       {PropData &&
         PropData.map((el, i) => (
           <Link
-            href={{ pathname: "/detail", query: { id: el.id } }}
+            href={{
+              pathname: "/detail",
+              query: { id: el.id, problemUserAddress: el.problemUserAddress },
+            }}
             key={i + 1}
           >
             <div className={Style.PropCard_box} key={i + 1}>
@@ -21,7 +24,7 @@ const PropCard = ({ PropData }) => {
                 <div className={Style.Container_Top}>
                   <div className={Style.PropCard_box_detail_top}>
                     <div className={Style.PropCard_box_detail_Status}>
-                      {el.solved === false ? (
+                      {el.selecting === false ? (
                         <div
                           className={Style.PropCard_box_detail_Status_unsolved}
                         >
@@ -31,7 +34,7 @@ const PropCard = ({ PropData }) => {
                         <div
                           className={Style.PropCard_box_detail_Status_solved}
                         >
-                          Solved
+                          Solving
                         </div>
                       )}
                     </div>

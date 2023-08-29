@@ -4,54 +4,86 @@ import React, { useState, useEffect, useContext } from "react";
 import Style from "../styles/author.module.css";
 import { Banner } from "../subPages/collectionPage/collectionIndex";
 import { Brand, Title, Spinner } from "../components/componentsindex";
-import FollowerTabCard from "../components/FollowerTab/FollowerTabCard/FollowerTabCard";
 import images from "../img";
+import { AuthorNFTCardBox } from "../subPages/authorPage/componentIndex";
 import {
   AuthorProfileCard,
   AuthorTaps,
-  AuthorNFTCardBox,
 } from "../subPages/authorPage/componentIndex";
 import { ProblemSolverContext } from "../Context/ProblemSolverContext";
 // import sm data
+const array1 = [
+  {
+    image: images.creatorbackground1,
+    price: 5,
+    auctionStarted: true,
+    title: "just a title",
+    descrition: "just a description",
+    expert: "Roxie",
+    id: 1,
+  },
+  {
+    image: images.creatorbackground2,
+    price: 5,
+    auctionStarted: true,
+    title: "just a title",
+    descrition: "just a description",
+    expert: "Roxie",
+    id: 4,
+  },
+  {
+    image: images.creatorbackground3,
+    price: 5,
+    auctionStarted: true,
+    title: "just a title",
+    descrition: "just a description",
+    expert: "Roxie",
+    id: 3,
+  },
+];
+const array2 = [
+  {
+    image: images.creatorbackground3,
+    price: 5,
+    auctionStarted: true,
+    title: "just a title",
+    descrition: "just a description",
+    expert: "Roxie",
+    id: 1,
+  },
+  {
+    image: images.creatorbackground4,
+    price: 5,
+    auctionStarted: true,
+    title: "just a title",
+    descrition: "just a description",
+    expert: "Roxie",
+    id: 4,
+  },
+  {
+    image: images.creatorbackground5,
+    price: 5,
+    auctionStarted: true,
+    title: "just a title",
+    descrition: "just a description",
+    expert: "Roxie",
+    id: 3,
+  },
+  {
+    image: images.creatorbackground6,
+    price: 5,
+    auctionStarted: true,
+    title: "just a title",
+    descrition: "just a description",
+    expert: "Roxie",
+    id: 2,
+  },
+];
 const profile = () => {
-  const followerArray = [
-    {
-      background: images.creatorbackground1,
-      user: images.user7,
-      seller: "0x70997970C518",
-    },
-    {
-      background: images.creatorbackground2,
-      user: images.user2,
-      seller: "0x70997970C518",
-    },
-    {
-      background: images.creatorbackground3,
-      user: images.user3,
-      seller: "0x70997970C518",
-    },
-    {
-      background: images.creatorbackground4,
-      user: images.user4,
-      seller: "0x70997970C518",
-    },
-    {
-      background: images.creatorbackground5,
-      user: images.user5,
-      seller: "0x70997970C518",
-    },
-    {
-      background: images.creatorbackground6,
-      user: images.user6,
-      seller: "0x70997970C518",
-    },
-  ];
-
-  const [collectiables, setCollectiables] = useState(true);
-  const [created, setCreated] = useState(false);
-  const [like, setLike] = useState(false);
-  const [follower, setFollower] = useState(false);
-  const [following, setFollowing] = useState(false);
+  const [isListed, setIsListed] = useState(true);
+  const [isMyNft, setIsMyNft] = useState(false);
+  const [listed, setListed] = useState(array2);
+  const [myNft, setMyNft] = useState(array1);
 
   // sm data
   const { currentAccount, userData } = useContext(ProblemSolverContext);
@@ -60,32 +92,13 @@ const profile = () => {
     <div className={Style.author}>
       <Banner bannerImage={images.background} />
       <AuthorProfileCard currentAccount={currentAccount} userData={userData} />
-      <AuthorTaps
-        setCollectiables={setCollectiables}
-        setCreated={setCreated}
-        setLike={setLike}
-        setFollower={setFollower}
-        setFollowing={setFollowing}
-      />
-
+      <AuthorTaps setIsListed={setIsListed} setIsMyNft={setIsMyNft} />
       <AuthorNFTCardBox
-        collectiables={collectiables}
-        created={created}
-        like={like}
-        follower={follower}
-        following={following}
+        isListed={isListed}
+        isMyNft={isMyNft}
+        listed={listed}
+        myNft={myNft}
       />
-      <Title
-        heading="Popular Creators"
-        paragraph="Click on music icon and enjoy NTF music or audio
-"
-      />
-      <div className={Style.author_box}>
-        {followerArray.map((el, i) => (
-          <FollowerTabCard i={i} el={el} key={i} />
-        ))}
-      </div>
-
       <Brand />
     </div>
   );

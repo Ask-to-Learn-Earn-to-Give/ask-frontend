@@ -14,7 +14,13 @@ const HeroSection = () => {
           <h1>
             Ask to learn <br /> earn to give
           </h1>
-          <p>Connect with our expert to solve your problem now</p>
+          <p>
+            Connect with expert consultants through Askify to solve your
+            real-world problems. <br /> <br /> Our tokenization process enables
+            you to convert your knowledge into valuable digital assets that can
+            be traded and utilized easily across our diverse platforms, allowing
+            you to earn passive income
+          </p>
           <br />
           <br />
           <br />
