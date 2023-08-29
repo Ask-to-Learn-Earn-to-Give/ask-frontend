@@ -72,7 +72,7 @@ const AuthorProfileCard = ({ currentAccount, userData }) => {
 
         <div className={Style.AuthorProfileCard_box_info}>
           <h2>
-            {currentAccount.slice(0, 12)}
+            {userData?.length ? userData[0].name : currentAccount.slice(0, 12)}
             <span>
               <MdVerified />
             </span>{" "}

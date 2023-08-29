@@ -6,14 +6,14 @@ import image from "../../img";
 import Image from "next/image";
 import { ProblemSolverContext } from "../../Context/ProblemSolverContext";
 import Link from "next/link";
-const PostBid = ({ id }) => {
+import { useRouter } from "next/router";
+const PostBid = ({ id, problemUserAddress }) => {
   const {
     currentAccount,
     userData,
     propData,
     PlaceBid,
     allUser,
-    getExpertBidId,
     selectedExpert,
     getBidders,
   } = useContext(ProblemSolverContext);
@@ -21,7 +21,8 @@ const PostBid = ({ id }) => {
   const [address, setAddress] = useState("");
   const [price, setPrice] = useState(0);
   const [allbidder, setAllbidder] = useState([]);
-
+  const [lookUp, setLookUp] = useState([]);
+  const rounter = useRouter();
   // connecting with smart contract
   const placeYourPrice = async () => {
     try {
@@ -38,21 +39,47 @@ const PostBid = ({ id }) => {
     setComment("");
     setPrice(0);
   };
-  // function get all bidder
-  const getAllBidders = async () => {
-    const item = await getBidders(id);
-    setAllbidder(item);
-  };
+  // useEffect to get all bidders and trigger lookUpData() when allbidder and allUser change
   useEffect(() => {
-    getAllBidders(id);
-    getDetailByAddress(allUser,)
-  }, []);
-  // get detail user by address
-  function getDetailByAddress(item, address) {
-    return item.find((obj) => obj.walletAddress === address);
+    async function getAllBidders() {
+      const item = await getBidders(id);
+      setAllbidder(item);
+    }
+    setAddress(userData);
+    getAllBidders();
+  }, [id, getBidders]);
+
+  useEffect(() => {
+    const getAllDataSeverS = lookUpData(allbidder, allUser);
+    setLookUp(getAllDataSeverS);
+  }, [allbidder, allUser]);
+  // function to look up expert information on data base
+  function lookUpData(A, B) {
+    const data = A?.map(({ expert, ...restA }) => {
+      const expertAddress = expert.toLowerCase();
+      // Check if B exists and is an array
+      if (!B || !Array.isArray(B)) {
+        return null;
+      }
+      const matchedUser = B?.find(({ walletAddress }) =>
+        walletAddress.toLowerCase().includes(expertAddress)
+      );
+      if (!matchedUser) {
+        return null;
+      }
+      const { walletAddress, ...restB } = matchedUser;
+      return { ...restA, ...restB, expert };
+    }).filter((item) => item !== null);
+    return data;
   }
-  console.log("akk", allbidder);
-  console.log("allUser", allUser);
+  // handle select
+  const handleSelected = async (propblemId, bidId, value, roomId) => {
+    const selected = await selectedExpert(propblemId, bidId, value);
+    if (selected) {
+      rounter.push(`/connectRoom/`);
+    }
+  };
+
   return (
     <div className={styles.commentBox}>
       <div className={styles.post_bid}>
@@ -93,39 +120,66 @@ const PostBid = ({ id }) => {
         </div>
       </div>
       <div className={styles.showbox}>
-        {allbidder?.map((el, index) => (
+        {lookUp?.map((el, index) => (
           <div key={index} className={styles.comment}>
             <div className={styles.showbox_container}>
               <div className={styles.showbox_container_userInfor}>
                 <div className={styles.showbox_container_userInfor_box}>
-                  <div className={styles.showbox_container_userInfor_img}>
-                    {/* <Image
-                      src={comment.userImg}
-                      alt="background image"
-                      width={50}
-                      height={50}
-                      className={styles.showbox_container_userInfor_img_img}
-                    /> */}
-                  </div>
+                  <Link
+                    href={{
+                      pathname: "/profile",
+                      query: el.expert,
+                    }}
+                  >
+                    <div className={styles.showbox_container_userInfor_img}>
+                      <Image
+                        src={el?.images}
+                        alt="background image"
+                        width={50}
+                        height={50}
+                        className={styles.showbox_container_userInfor_img_img}
+                      />
+                    </div>
+                  </Link>
                   <div className={styles.showbox_container_userInfor_userName}>
-                    {/* <h2>{comment.userName}</h2> */}
+                    <h2>{el?.name}</h2>
                   </div>
                 </div>
                 <div className={styles.showbox_container_userInfor_price}>
                   <h2>Price</h2>
                   <h3>{el.bidAmount} klay</h3>
                 </div>
-                <Link href={{ pathname: "/connectRoom", query: el }}>
+                {currentAccount &&
+                currentAccount.toString().toLowerCase() ===
+                  problemUserAddress?.toString().toLowerCase() ? (
                   <div className={styles.showbox_container_userInfor_selecbox}>
                     <div>
                       <Button
-                        handleClick={() => {}}
+                        handleClick={() =>
+                          handleSelected(
+                            el.problemId,
+                            el.bidId,
+                            el.bidAmount,
+                            el.expert
+                          )
+                        }
                         className={styles.button}
                         btnName="Select"
                       ></Button>
                     </div>
                   </div>
-                </Link>
+                ) : (
+                  <div className={styles.showbox_container_userInfor_selecbox}>
+                    <div>
+                      <Button
+                        handleClick={() => {}}
+                        classStyle={styles.button}
+                        btnName="View"
+                        disable={true}
+                      ></Button>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className={styles.showbox_container_userComment}>
                 {el.expertDescription}

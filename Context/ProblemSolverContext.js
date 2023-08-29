@@ -131,12 +131,13 @@ export const ProblemSolverProvider = ({ children }) => {
     }
   }, [allUser, data]);
   // set mapping with db with blockchain.
+  // problemUserAddress walletAddress
   function mergeArrays(arr1, arr2) {
     const map = new Map(
       arr2.map((obj) => [obj.walletAddress.toLowerCase(), obj])
     );
     const merged = arr1.map((obj1) => {
-      const obj2 = map.get(obj1.walletAddress.toLowerCase());
+      const obj2 = map.get(obj1.problemUserAddress.toLowerCase());
       if (!obj2)
         return {
           ...obj1,
@@ -153,9 +154,7 @@ export const ProblemSolverProvider = ({ children }) => {
     });
     return merged;
   }
-  console.log("allUser", allUser);
-  console.log("data", data);
-  console.log("propData", propData);
+
   //----------------------------------------------------
   // upload to ipfs function
   const uploadToIPFS = async (file) => {
@@ -212,7 +211,7 @@ export const ProblemSolverProvider = ({ children }) => {
               title,
               problemImage: image,
               expertDescription: description,
-              walletAddress: user,
+              problemUserAddress: user,
               selectedExpert,
               cost: cost.toString(),
               solved,
@@ -233,7 +232,12 @@ export const ProblemSolverProvider = ({ children }) => {
     if (!problemId || !amount || !comment) console.log("data missing");
     try {
       const contract = await connectingWithSmartContract();
-      const transaction = await contract.placeBid(problemId, amount, comment);
+      const bidAmount = ethers.utils.parseUnits(amount.toString(), "ether");
+      const transaction = await contract.placeBid(
+        problemId,
+        bidAmount,
+        comment
+      );
       await transaction.wait();
       console.log("Place your bid  successfully");
     } catch (error) {
@@ -253,13 +257,41 @@ export const ProblemSolverProvider = ({ children }) => {
     }
   };
   // function selected expert
-  const selectedExpert = async (problemId, _bidId) => {
+  const selectedExpert = async (problemId, _bidId, _value) => {
     if (!problemId || !_bidId) console.log("data missing");
     try {
       const contract = await connectingWithSmartContract();
-      const transaction = await contract.selectExpert(problemId, _bidId);
+      const bidAmount = ethers.utils.parseUnits(_value.toString(), "ether");
+      const transaction = await contract.selectExpert(problemId, _bidId, {
+        value: bidAmount,
+      });
+
+      console.log("bitamount", bidAmount.toString());
       await transaction.wait();
       console.log("Selected expert successfully");
+      return true;
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  // function get all bidder
+  const getProblemById = async (problemId) => {
+    if (!problemId) console.log("data missing");
+    try {
+      const contract = await connectingWithSmartContract();
+      const [title, image, description, user, selectedExpert, cost] =
+        await contract.getProblem(problemId);
+      const solved = false; // Since the `getProblem` function doesn't return a boolean indicating whether the problem is solved or not, you can set it to false by default
+      const item = {
+        title,
+        image,
+        description,
+        problemUserAddress: user,
+        selectedExpert,
+        cost,
+        solved,
+      };
+      return item;
     } catch (error) {
       console.log("error", error);
     }
@@ -283,7 +315,10 @@ export const ProblemSolverProvider = ({ children }) => {
               bidId: bidId.toString(),
               problemId: problemId.toString(),
               expert,
-              bidAmount: bidAmount.toString(),
+              bidAmount: ethers.utils.formatUnits(
+                bidAmount.toString(),
+                "ether"
+              ),
               expertDescription,
             };
           }
@@ -312,6 +347,7 @@ export const ProblemSolverProvider = ({ children }) => {
         data,
         allUser,
         propData,
+        getProblemById,
       }}
     >
       {children}

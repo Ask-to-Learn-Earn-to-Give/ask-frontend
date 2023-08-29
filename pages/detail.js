@@ -9,7 +9,7 @@ import PostBid from "../components/PostBid/PostBid";
 import { useRouter } from "next/router";
 const detail = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { id, problemUserAddress } = router.query;
   return (
     <div className={Style.searchPage}>
       <Banner bannerImage={images.background} />
@@ -26,8 +26,8 @@ const detail = () => {
         </Link>
       </div>
       <div className={Style.container}>
-        <DescriptionDetail id={id} />
-        <PostBid id={id} />
+        <DescriptionDetail id={id} problemUserAddress={problemUserAddress} />
+        <PostBid id={id} problemUserAddress={problemUserAddress} />
       </div>
       <div className={Style.back}>
         <Link href={{ pathname: "/searchPage" }}>

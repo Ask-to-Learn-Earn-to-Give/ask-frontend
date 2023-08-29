@@ -1,10 +1,15 @@
 .PropCard{
-    width: 80%;
+    width: 85%;
     margin:  0 auto;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 3rem;
     margin-bottom: 14rem;
+    background-color: var(--text-background);
+    padding: 2rem;
+    border-radius: 20px;
+    overflow-y: scroll;
+    max-height: 1200px;
 }
 
 .PropCard_box{
@@ -12,8 +17,8 @@
     height: 290px;
     cursor: pointer;
     transition: all .3s ease-in;
-    border-radius: 1rem;
-    border: 1px solid var(--icons-color);
+
+
 }
 
 .PropCard_box:hover{
@@ -23,7 +28,9 @@
     display: flex;
     justify-content: space-between;
     padding: 1.5rem;
-    
+    background-color: var(--background);
+    border-radius: 1rem;
+    border: 1px solid var(--icons-color);
 }
 .Container_Top{
     flex-basis: 100%;
