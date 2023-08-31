@@ -96,7 +96,7 @@ const PropCard = ({ PropData }) => {
                     <p>Address</p>
                   </div>
                   <div>
-                    <h4>{el.walletAddress?.slice(0, 8)}...</h4>
+                    <h4>{el.address?.slice(0, 8)}...</h4>
                   </div>
                 </div>
               </div>

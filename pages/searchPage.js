@@ -22,7 +22,7 @@ const searchPage = () => {
   }, [propData]);
   const onHandleSearch = (value) => {
     const filtereData = propData.filter(({ title }) =>
-      title.toLowerCase().includes(value.toLowerCase())
+      title().includes(value())
     );
     if (filtereData.length === 0) {
       setDataCall(dataCopy);

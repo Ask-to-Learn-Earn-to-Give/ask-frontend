@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Web3Modal from "web3modal";
 import { ethers } from "ethers";
 import Router from "next/router";
-import axios from "axios";
+import axios from "../lib/axios";
 import { useRouter } from "next/router";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import { ProblemSolverAddress, ProblemSolverABI } from "./constants";
@@ -50,10 +50,10 @@ export const ProblemSolverProvider = ({ children }) => {
   const [allUser, setAllUser] = useState("");
   const [propData, setPropData] = useState([]);
   const { operation: getUserExis, data: news } = useAxios(
-    `/api/v1/users?walletAddress=${currentAccount}`,
+    `/api/user?address=${currentAccount}`,
     "GET"
   );
-  const { operation: getAllUser, data: get } = useAxios(`/api/v1/users`, "GET");
+  const { operation: getAllUser, data: get } = useAxios(`/api/user`, "GET");
   const router = useRouter();
   // check if wallet connected
   const checkIfWalletConnected = async () => {
@@ -63,7 +63,9 @@ export const ProblemSolverProvider = ({ children }) => {
         method: "eth_accounts",
       });
       if (accounts.length) {
-        setCurrentAccount(accounts[0]);
+        if (localStorage.getItem("token")) {
+          setCurrentAccount(accounts[0]);
+        }
       } else {
         console.log("No account found");
       }
@@ -83,6 +85,30 @@ export const ProblemSolverProvider = ({ children }) => {
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
+      const {
+        data: { nonce },
+      } = await axios.post("/api/auth/wallet", {
+        address: accounts[0],
+      });
+
+      const signedNonce = await window.ethereum.request({
+        method: "personal_sign",
+        params: [
+          `0x${Buffer.from(nonce, "utf8").toString("hex")}`,
+          accounts[0],
+        ],
+        from: accounts[0],
+      });
+
+      const {
+        data: { token },
+        statusText,
+      } = await axios.post("/api/auth/verify-wallet", {
+        address: accounts[0],
+        signedNonce: signedNonce,
+      });
+
+      localStorage.setItem("token", token);
       setCurrentAccount(accounts[0]);
       // window.location.reload();
     } catch (error) {
@@ -133,11 +159,9 @@ export const ProblemSolverProvider = ({ children }) => {
   // set mapping with db with blockchain.
   // problemUserAddress walletAddress
   function mergeArrays(arr1, arr2) {
-    const map = new Map(
-      arr2.map((obj) => [obj.walletAddress.toLowerCase(), obj])
-    );
+    const map = new Map(arr2.map((obj) => [obj.address, obj]));
     const merged = arr1.map((obj1) => {
-      const obj2 = map.get(obj1.problemUserAddress.toLowerCase());
+      const obj2 = map.get(obj1.address);
       if (!obj2)
         return {
           ...obj1,
@@ -211,7 +235,7 @@ export const ProblemSolverProvider = ({ children }) => {
               title,
               problemImage: image,
               expertDescription: description,
-              problemUserAddress: user,
+              address: user,
               selectedExpert,
               cost: cost.toString(),
               solved,
@@ -239,7 +263,7 @@ export const ProblemSolverProvider = ({ children }) => {
         comment
       );
       await transaction.wait();
-      console.log("Place your bid  successfully");
+      console.log("Place your bid successfully");
     } catch (error) {
       console.log("error", error);
     }

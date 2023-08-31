@@ -27,7 +27,7 @@ const Form = ({ fileUrl }) => {
     instagram: "",
     description: "",
     images: "",
-    walletAddress: "",
+    address: "",
   };
   const [forms, setForms] = useState(defaulInput);
 
@@ -50,7 +50,7 @@ const Form = ({ fileUrl }) => {
     let dataUpdate = { ...data };
     // if user not exit create user
     if (userData.length == 0) {
-      dataUpdate.walletAddress = currentAccount;
+      dataUpdate.address = currentAccount;
       dataUpdate.images = fileUrl;
       createUser(dataUpdate);
       setForms(dataUpdate);
@@ -175,7 +175,7 @@ const Form = ({ fileUrl }) => {
                 type="text"
                 placeholder="Your wallet address "
                 defaultValue={currentAccount}
-                {...register("walletAddress")}
+                {...register("address")}
                 disabled={true}
               />
               <div className={Style.Form_box_input_box_icon}>

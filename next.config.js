@@ -10,7 +10,8 @@ const nextConfig = {
   },
   env: {
     // API_URL: "http://127.0.0.1:3001",
-    API_URL: "https://node-nft-api.onrender.com",
+    API_URL: "http://localhost:8080",
+    // API_URL: "https://node-nft-api.onrender.com",
     // infura
     PROJECT_ID: "2QXX7CVuy55vGeSCi2ntWSx39lg",
     PROJECT_SECRET_KEY: "9ab74124c25fdacc432843ec37076620",
