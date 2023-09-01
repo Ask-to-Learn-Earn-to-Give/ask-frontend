@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Web3Modal from "web3modal";
 import { ethers } from "ethers";
 import Router from "next/router";
-import axios from "../lib/axios";
+import axios, { addTokenToAxios } from "../lib/axios";
 import { useRouter } from "next/router";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import { ProblemSolverAddress, ProblemSolverABI } from "./constants";
@@ -64,6 +64,7 @@ export const ProblemSolverProvider = ({ children }) => {
       });
       if (accounts.length) {
         if (localStorage.getItem("token")) {
+          addTokenToAxios();
           setCurrentAccount(accounts[0]);
         }
       } else {
@@ -109,6 +110,7 @@ export const ProblemSolverProvider = ({ children }) => {
       });
 
       localStorage.setItem("token", token);
+      addTokenToAxios();
       setCurrentAccount(accounts[0]);
       // window.location.reload();
     } catch (error) {
@@ -132,16 +134,16 @@ export const ProblemSolverProvider = ({ children }) => {
   // get current userData in database
   useEffect(() => {
     if (currentAccount) {
-      getUserExis().then((response) => {
-        setUserData(response?.data.user);
+      getUserExis().then(({ user }) => {
+        setUserData(user);
       });
     }
   }, [currentAccount]);
 
   // fetch all data from database
   useEffect(() => {
-    getAllUser().then((response) => {
-      setAllUser(response?.data.user);
+    getAllUser().then(({ users }) => {
+      setAllUser(users);
     });
   }, []);
   // fetch all data from blockchain
