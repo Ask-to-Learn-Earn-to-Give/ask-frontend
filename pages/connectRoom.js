@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import Style from "../styles/searchPage.module.css";
+import Style from "../styles/problems.module.css";
 import { Banner } from "../subPages/collectionPage/collectionIndex";
 import images from "../img";
 import { ProblemSolverContext } from "../Context/ProblemSolverContext";

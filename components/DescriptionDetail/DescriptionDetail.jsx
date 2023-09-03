@@ -5,20 +5,21 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 
-const DescriptionDetail = ({ id }) => {
+const DescriptionDetail = ({ problemId }) => {
   const { propData, getProblemById } = useContext(ProblemSolverContext);
   const [postDetail, setPostDetail] = useState();
   const router = useRouter();
-  useEffect(() => {
-    if (id) {
-      getDetail(id);
-    }
-  }, [id]);
 
   const getDetail = async (_id) => {
     const detail = await getProblemById(_id);
+    console.log("detail", detail);
     setPostDetail(detail);
   };
+
+  useEffect(() => {
+    if (problemId) getDetail(problemId);
+  }, [problemId]);
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>

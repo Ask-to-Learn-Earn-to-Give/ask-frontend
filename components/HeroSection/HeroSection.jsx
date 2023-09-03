@@ -26,7 +26,7 @@ const HeroSection = () => {
           <br />
           <Button
             btnName={"Discover Now"}
-            handleClick={() => router.push("/searchPage")}
+            handleClick={() => router.push("/problems")}
           />
         </div>
         <div className={Style.heroSection_box_right}>

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { TiTick } from "react-icons/ti";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -8,6 +8,8 @@ import formStyle from "./Form.module.css";
 import images from "../../img";
 import { Button } from "../../components/componentsindex";
 import { DropZone } from "../CreatePage/createIndex";
+import useSocket from "../../hook/useSocket";
+import axios from "../../lib/axios";
 
 const Create = ({ uploadToIPFS, CreateProblem }) => {
   const [active, setActive] = useState(0);
@@ -16,6 +18,28 @@ const Create = ({ uploadToIPFS, CreateProblem }) => {
   const [category, setCategory] = useState(0);
   const [image, setImage] = useState(null);
   const router = useRouter();
+
+  const { socket } = useSocket("problem");
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("problem.created", async ({ problemId }) => {
+      console.log(problemId);
+      await axios.post(`/api/problem/${problemId}/upload-data`, {
+        title,
+        description,
+        image,
+      });
+
+      router.push(`/problems`);
+    });
+
+    return () => {
+      socket.off("problem.created");
+    };
+  }, [socket, title, description, image]);
+
   const categoryArry = [
     {
       image: images.blockchain,

@@ -1,14 +1,15 @@
-import React, { useContext, useState } from "react";
-import Style from "../styles/create.module.css";
-import { Banner } from "../subPages/collectionPage/collectionIndex";
-import { Create } from "../subPages/CreatePage/createIndex";
+import React, { useContext, useEffect, useState } from "react";
+import Style from "../../styles/create.module.css";
+import { Banner } from "../../subPages/collectionPage/collectionIndex";
+import { Create } from "../../subPages/CreatePage/createIndex";
 
-import images from "../img";
+import images from "../../img";
 // import data from contract
-import { ProblemSolverContext } from "../Context/ProblemSolverContext";
+import { ProblemSolverContext } from "../../Context/ProblemSolverContext";
+import useSocket from "../../hook/useSocket";
+import axios from "../../lib/axios";
 const create = () => {
   const { uploadToIPFS, CreateProblem } = useContext(ProblemSolverContext);
-  // tabs
 
   return (
     <div className={Style.create}>

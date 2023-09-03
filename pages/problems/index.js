@@ -1,14 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
-import Style from "../styles/searchPage.module.css";
-import { Slider, Brand, Spinner } from "../components/componentsindex";
-import { Filter } from "../components/componentsindex";
-import { Banner, PropCard } from "../subPages/collectionPage/collectionIndex";
-import { SearchBar } from "../subPages/SearchPage/searchBarIndex";
-import useAxios from "../hook/useAxios";
+import Style from "../../styles/problems.module.css";
+import { Slider, Brand, Spinner } from "../../components/componentsindex";
+import { Filter } from "../../components/componentsindex";
+import {
+  Banner,
+  PropCard,
+} from "../../subPages/collectionPage/collectionIndex";
+import { SearchBar } from "../../subPages/Problems/searchBarIndex";
+import useAxios from "../../hook/useAxios";
 
-import images from "../img";
+import images from "../../img";
 // smartcontract
-import { ProblemSolverContext } from "../Context/ProblemSolverContext";
+import { ProblemSolverContext } from "../../Context/ProblemSolverContext";
 
 const searchPage = () => {
   // connect data smart contract

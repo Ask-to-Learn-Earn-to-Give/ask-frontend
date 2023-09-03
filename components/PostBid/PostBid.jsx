@@ -7,7 +7,10 @@ import Image from "next/image";
 import { ProblemSolverContext } from "../../Context/ProblemSolverContext";
 import Link from "next/link";
 import { useRouter } from "next/router";
-const PostBid = ({ id, problemUserAddress }) => {
+import useSocket from "../../hook/useSocket";
+import axios from "../../lib/axios";
+import { ethers } from "ethers";
+const PostBid = ({ problemId }) => {
   const {
     currentAccount,
     userData,
@@ -16,68 +19,97 @@ const PostBid = ({ id, problemUserAddress }) => {
     allUser,
     selectedExpert,
     getBidders,
+    getProblemById,
   } = useContext(ProblemSolverContext);
   const [comment, setComment] = useState("");
   const [address, setAddress] = useState("");
   const [price, setPrice] = useState(0);
-  const [allbidder, setAllbidder] = useState([]);
+  const [bids, setBids] = useState([]);
   const [lookUp, setLookUp] = useState([]);
   const rounter = useRouter();
-  // connecting with smart contract
-  const placeYourPrice = async () => {
+  const { socket } = useSocket("problem");
+  const [problem, setProblem] = useState({});
+
+  const addComment = async () => {
+    if (!comment.trim()) return;
+    if (!price) return;
+
     try {
-      await PlaceBid(id, price, comment);
+      await PlaceBid(problem.onchainId, price, comment);
       console.log("Place successfully");
     } catch (error) {
       console.log("error while place your price", error);
     }
-  };
-  const addComment = () => {
-    if (!comment.trim()) return;
-    if (!price) return;
-    placeYourPrice(id, price, comment);
+
     setComment("");
     setPrice(0);
   };
   // useEffect to get all bidders and trigger lookUpData() when allbidder and allUser change
   useEffect(() => {
-    async function getAllBidders() {
-      const item = await getBidders(id);
-      setAllbidder(item);
+    if (!problemId) return;
+
+    async function fetchData() {
+      const bids = await getBidders(problemId);
+      const problem = await getProblemById(problemId);
+
+      setBids(bids);
+      setProblem(problem);
     }
+
     setAddress(userData);
-    getAllBidders();
-  }, [id, getBidders]);
+    fetchData();
+  }, [problemId, getBidders]);
 
   useEffect(() => {
-    const getAllDataSeverS = lookUpData(allbidder, allUser);
-    setLookUp(getAllDataSeverS);
-  }, [allbidder, allUser]);
-  // function to look up expert information on data base
-  function lookUpData(A, B) {
-    const data = A?.map(({ expert, ...restA }) => {
-      const expertAddress = expert.toLowerCase();
-      // Check if B exists and is an array
-      if (!B || !Array.isArray(B)) {
-        return null;
-      }
-      const matchedUser = B?.find(({ walletAddress }) =>
-        walletAddress.toLowerCase().includes(expertAddress)
-      );
-      if (!matchedUser) {
-        return null;
-      }
-      const { walletAddress, ...restB } = matchedUser;
-      return { ...restA, ...restB, expert };
-    }).filter((item) => item !== null);
-    return data;
-  }
+    if (!socket) return;
+
+    socket.on("problem.bid.created", async ({ problemBidId }) => {
+      await axios.post(`/api/problem-bid/${problemBidId}/upload-data`, {
+        description: comment,
+      });
+    });
+
+    return () => socket.off("problem.bid.created");
+  }, [socket, comment]);
+
+  // useEffect(() => {
+  //   const getAllDataSeverS = lookUpData(allbidder, allUser);
+  //   setLookUp(getAllDataSeverS);
+  // }, [allbidder, allUser]);
+  // // function to look up expert information on data base
+  // function lookUpData(A, B) {
+  //   const data = A?.map(({ expert, ...restA }) => {
+  //     const expertAddress = expert.address.toLowerCase();
+  //     // Check if B exists and is an array
+  //     if (!B || !Array.isArray(B)) {
+  //       return null;
+  //     }
+  //     const matchedUser = B?.find(({ address }) =>
+  //       address.toLowerCase().includes(expertAddress)
+  //     );
+  //     if (!matchedUser) {
+  //       return null;
+  //     }
+  //     const { address, ...restB } = matchedUser;
+  //     return { ...restA, ...restB, expert };
+  //   }).filter((item) => item !== null);
+  //   return data;
+  // }
   // handle select
-  const handleSelected = async (propblemId, bidId, value, roomId) => {
-    const selected = await selectedExpert(propblemId, bidId, value);
-    if (selected) {
-      rounter.push(`/connectRoom/`);
-    }
+  const handleSelected = async (
+    problemOnchainId,
+    problemBidOnchainId,
+    value
+  ) => {
+    console.log(problemOnchainId, problemBidOnchainId, value);
+    const selected = await selectedExpert(
+      problemOnchainId,
+      problemBidOnchainId,
+      value
+    );
+    // if (selected) {
+    //   rounter.push(`/connectRoom/`);
+    // }
   };
 
   return (
@@ -120,20 +152,19 @@ const PostBid = ({ id, problemUserAddress }) => {
         </div>
       </div>
       <div className={styles.showbox}>
-        {lookUp?.map((el, index) => (
+        {bids.map((el, index) => (
           <div key={index} className={styles.comment}>
             <div className={styles.showbox_container}>
               <div className={styles.showbox_container_userInfor}>
                 <div className={styles.showbox_container_userInfor_box}>
                   <Link
                     href={{
-                      pathname: "/profile",
-                      query: el.expert,
+                      pathname: `/user/${el.expert._id}`,
                     }}
                   >
                     <div className={styles.showbox_container_userInfor_img}>
-                      <Image
-                        src={el?.images}
+                      <img
+                        src={el.expert.avatarUrl}
                         alt="background image"
                         width={50}
                         height={50}
@@ -142,25 +173,25 @@ const PostBid = ({ id, problemUserAddress }) => {
                     </div>
                   </Link>
                   <div className={styles.showbox_container_userInfor_userName}>
-                    <h2>{el?.name}</h2>
+                    <h2>{el.expert.fullName}</h2>
                   </div>
                 </div>
                 <div className={styles.showbox_container_userInfor_price}>
                   <h2>Price</h2>
-                  <h3>{el.bidAmount} klay</h3>
+                  <h3>{ethers.utils.formatUnits(el.amount)} klay</h3>
                 </div>
                 {currentAccount &&
                 currentAccount.toString().toLowerCase() ===
-                  problemUserAddress?.toString().toLowerCase() ? (
+                  problem.author.address?.toString().toLowerCase() ? (
                   <div className={styles.showbox_container_userInfor_selecbox}>
                     <div>
                       <Button
                         handleClick={() =>
                           handleSelected(
-                            el.problemId,
-                            el.bidId,
-                            el.bidAmount,
-                            el.expert
+                            problem.onchainId,
+                            el.onchainId,
+                            el.amount,
+                            el.expert.address
                           )
                         }
                         className={styles.button}
@@ -182,7 +213,7 @@ const PostBid = ({ id, problemUserAddress }) => {
                 )}
               </div>
               <div className={styles.showbox_container_userComment}>
-                {el.expertDescription}
+                {el.description}
               </div>
               <div className={styles.post_date}>
                 <p>Post date: 23-8-2023</p>

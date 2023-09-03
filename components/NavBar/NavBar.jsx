@@ -154,7 +154,7 @@ const NavBar = () => {
                 <Button
                   btnName="Ask Now"
                   handleClick={() => {
-                    router.push("/create");
+                    router.push("/problems/create");
                   }}
                 />
               </div>

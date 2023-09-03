@@ -14,8 +14,7 @@ const PropCard = ({ PropData }) => {
         PropData.map((el, i) => (
           <Link
             href={{
-              pathname: "/detail",
-              query: { id: el.id, problemUserAddress: el.problemUserAddress },
+              pathname: `/problems/${el._id}`,
             }}
             key={i + 1}
           >

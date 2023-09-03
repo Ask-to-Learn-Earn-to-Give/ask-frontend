@@ -10,10 +10,10 @@ import useAxios from "../hook/useAxios";
 import { toast } from "react-toastify";
 
 // infura register
-const projectID = process.env.PROJECT_ID;
-const baobab = process.env.BAO_BAB;
-const projectSecretKey = process.env.PROJECT_SECRET_KEY;
-const subdomain = process.env.SUB_DOMAIN;
+const projectID = process.env.NEXT_PUBLIC_PROJECT_ID;
+const baobab = process.env.NEXT_PUBLIC_BAO_BAB;
+const projectSecretKey = process.env.NEXT_PUBLIC_PROJECT_SECRET_KEY;
+const subdomain = process.env.NEXT_PUBLIC_SUB_DOMAIN;
 const auth = `Basic ${Buffer.from(`${projectID}:${projectSecretKey}`).toString(
   "base64"
 )}`;
@@ -68,6 +68,7 @@ export const ProblemSolverProvider = ({ children }) => {
           setCurrentAccount(accounts[0]);
         }
       } else {
+        localStorage.removeItem("token");
         console.log("No account found");
       }
     } catch (error) {
@@ -159,7 +160,7 @@ export const ProblemSolverProvider = ({ children }) => {
     }
   }, [allUser, data]);
   // set mapping with db with blockchain.
-  // problemUserAddress walletAddress
+  // problemUserAddress address
   function mergeArrays(arr1, arr2) {
     const map = new Map(arr2.map((obj) => [obj.address, obj]));
     const merged = arr1.map((obj1) => {
@@ -205,52 +206,53 @@ export const ProblemSolverProvider = ({ children }) => {
         description
       );
       await transaction.wait();
-      console.log("Create successfully");
-
-      router.push("/searchPage");
     } catch (error) {
       console.log("error", error);
     }
   };
   // fetch problem
   const fetchAllProblems = async () => {
-    try {
-      const provider = new ethers.providers.JsonRpcProvider(baobab);
-      const contract = fetchContract(provider);
-      const data = await contract.getAllProblems();
-      const items = await Promise.all(
-        data.map(
-          async ({
-            id,
-            title,
-            image,
-            description,
-            user,
-            selectedExpert,
-            cost,
-            solved,
-            markedAsSolved,
-            selecting,
-          }) => {
-            return {
-              id: id.toString(),
-              title,
-              problemImage: image,
-              expertDescription: description,
-              address: user,
-              selectedExpert,
-              cost: cost.toString(),
-              solved,
-              markedAsSolved,
-              selecting,
-            };
-          }
-        )
-      );
-      return items;
-    } catch (error) {
-      console.log(error);
-    }
+    const res = await axios.get("/api/problem?limit=100&skip=0");
+    const { problems } = res.data;
+
+    return problems;
+    // try {
+    //   const provider = new ethers.providers.JsonRpcProvider(baobab);
+    //   const contract = fetchContract(provider);
+    //   const data = await contract.getAllProblems();
+    //   const items = await Promise.all(
+    //     data.map(
+    //       async ({
+    //         id,
+    //         title,
+    //         image,
+    //         description,
+    //         user,
+    //         selectedExpert,
+    //         cost,
+    //         solved,
+    //         markedAsSolved,
+    //         selecting,
+    //       }) => {
+    //         return {
+    //           id: id.toString(),
+    //           title,
+    //           problemImage: image,
+    //           expertDescription: description,
+    //           address: user,
+    //           selectedExpert,
+    //           cost: cost.toString(),
+    //           solved,
+    //           markedAsSolved,
+    //           selecting,
+    //         };
+    //       }
+    //     )
+    //   );
+    //   return items;
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   // place a bid price
@@ -283,16 +285,20 @@ export const ProblemSolverProvider = ({ children }) => {
     }
   };
   // function selected expert
-  const selectedExpert = async (problemId, _bidId, _value) => {
-    if (!problemId || !_bidId) console.log("data missing");
+  const selectedExpert = async (
+    problemOnchainId,
+    problemBidOnchainId,
+    value
+  ) => {
     try {
       const contract = await connectingWithSmartContract();
-      const bidAmount = ethers.utils.parseUnits(_value.toString(), "ether");
-      const transaction = await contract.selectExpert(problemId, _bidId, {
-        value: bidAmount,
-      });
-
-      console.log("bitamount", bidAmount.toString());
+      const transaction = await contract.selectExpert(
+        problemOnchainId,
+        problemBidOnchainId,
+        {
+          value: value,
+        }
+      );
       await transaction.wait();
       console.log("Selected expert successfully");
       return true;
@@ -302,58 +308,45 @@ export const ProblemSolverProvider = ({ children }) => {
   };
   // function get all bidder
   const getProblemById = async (problemId) => {
-    if (!problemId) console.log("data missing");
-    try {
-      const contract = await connectingWithSmartContract();
-      const [title, image, description, user, selectedExpert, cost] =
-        await contract.getProblem(problemId);
-      const solved = false; // Since the `getProblem` function doesn't return a boolean indicating whether the problem is solved or not, you can set it to false by default
-      const item = {
-        title,
-        image,
-        description,
-        problemUserAddress: user,
-        selectedExpert,
-        cost,
-        solved,
-      };
-      return item;
-    } catch (error) {
-      console.log("error", error);
-    }
+    const res = await axios.get(`/api/problem/${problemId}`);
+    const { problem } = res.data;
+    return problem;
   };
   // function get all bidder
   const getBidders = async (problemId) => {
-    if (!problemId) console.log("data missing");
-    try {
-      const contract = await connectingWithSmartContract();
-      const data = await contract.getBids(problemId);
-      const items = await Promise.all(
-        data.map(
-          async ({
-            bidId,
-            problemId,
-            expert,
-            bidAmount,
-            expertDescription,
-          }) => {
-            return {
-              bidId: bidId.toString(),
-              problemId: problemId.toString(),
-              expert,
-              bidAmount: ethers.utils.formatUnits(
-                bidAmount.toString(),
-                "ether"
-              ),
-              expertDescription,
-            };
-          }
-        )
-      );
-      return items;
-    } catch (error) {
-      console.log("error", error);
-    }
+    const res = await axios.get(`/api/problem/${problemId}/bid`);
+    const { problemBids } = res.data;
+    return problemBids;
+    // if (!problemId) console.log("data missing");
+    // try {
+    //   const contract = await connectingWithSmartContract();
+    //   const data = await contract.getBids(problemId);
+    //   const items = await Promise.all(
+    //     data.map(
+    //       async ({
+    //         bidId,
+    //         problemId,
+    //         expert,
+    //         bidAmount,
+    //         expertDescription,
+    //       }) => {
+    //         return {
+    //           bidId: bidId.toString(),
+    //           problemId: problemId.toString(),
+    //           expert,
+    //           bidAmount: ethers.utils.formatUnits(
+    //             bidAmount.toString(),
+    //             "ether"
+    //           ),
+    //           expertDescription,
+    //         };
+    //       }
+    //     )
+    //   );
+    //   return items;
+    // } catch (error) {
+    //   console.log("error", error);
+    // }
   };
   return (
     <ProblemSolverContext.Provider
