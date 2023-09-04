@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-const Message = ({ text, senderName, senderAvatar, sentByCurrentUser }) => {
+const Message = ({ content, senderName, senderAvatar, sentByCurrentUser }) => {
   return (
     <div
       style={{
@@ -10,36 +10,52 @@ const Message = ({ text, senderName, senderAvatar, sentByCurrentUser }) => {
         flexDirection: sentByCurrentUser ? "row-reverse" : "row",
       }}
     >
-      <div style={{ display: "flex", flexDirection: "column" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: sentByCurrentUser ? "flex-end" : "flex-start",
+          width: "50%",
+        }}
+      >
         <div style={{ display: "flex", flexDirection: "row" }}>
-          <div>
-            <Image
-              src={senderAvatar}
-              width={50}
-              height={50}
-              alt={`${senderName}'s avatar`}
+          <div
+            style={{
+              order: sentByCurrentUser ? "1" : "0",
+              marginLeft: sentByCurrentUser ? "10px" : "0",
+              marginRight: sentByCurrentUser ? "0" : "10px",
+              textAlign: sentByCurrentUser ? "right" : "left",
+              flexGrow: 1,
+            }}
+          >
+            <div
               style={{
                 marginLeft: sentByCurrentUser ? "10px" : "0",
                 marginRight: sentByCurrentUser ? "0" : "10px",
-                borderRadius: "50%",
-              }}
-            />
-          </div>
-          <div>
-            <span style={{ fontWeight: "bold", marginBottom: "5px" }}>
-              {senderName}
-            </span>
-            <div
-              style={{
-                backgroundColor: sentByCurrentUser ? "#007bff" : "#e6e6e6",
-                color: sentByCurrentUser ? "#fff" : "#333",
-                padding: "10px",
-                borderRadius: "10px",
-                maxWidth: "70%",
               }}
             >
-              {text}
+              <Image
+                src={senderAvatar}
+                width={50}
+                height={50}
+                alt={`${senderName}'s avatar`}
+                style={{ borderRadius: "50%" }}
+              />
             </div>
+            <div style={{ textAlign: "center" }}>
+              <span style={{ fontWeight: "bold" }}>{senderName}</span>
+            </div>
+          </div>
+          <div
+            style={{
+              backgroundColor: sentByCurrentUser ? "#007bff" : "#e6e6e6",
+              color: sentByCurrentUser ? "#fff" : "#333",
+              padding: "10px",
+              borderRadius: "10px",
+              maxWidth: "80%",
+            }}
+          >
+            {content}
           </div>
         </div>
       </div>

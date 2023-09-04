@@ -3,7 +3,10 @@
 .upload_box_input_para{
     padding: 0 1rem;
  }
- 
+ .upload{
+    width: 80%;
+    margin: 0 auto;
+ }
  .upload_box_slider_div{
   display: flex;
   gap: 1rem;

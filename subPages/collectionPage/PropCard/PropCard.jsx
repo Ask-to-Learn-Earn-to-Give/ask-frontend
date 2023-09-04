@@ -45,7 +45,7 @@ const PropCard = ({ PropData }) => {
                     <div className={Style.PropCard_box_detail_bot_image}>
                       <Image
                         className={Style.PropCard_box_detail_bot_image_img}
-                        src={el.problemImage}
+                        src={el.image}
                         alt="profile image"
                         width={150}
                         height={150}

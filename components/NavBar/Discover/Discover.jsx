@@ -10,8 +10,8 @@ const Discover = ({ currentAccount }) => {
   const discover = [
     {
       name: "Discovery",
-      link: "searchPage",
-      protect: "searchPage",
+      link: "problems",
+      protect: "problems",
     },
     {
       name: "Your Profile",

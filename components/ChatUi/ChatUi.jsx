@@ -2,53 +2,87 @@ import React, { useState } from "react";
 import Message from "./Message";
 import images from "../../img/index";
 import styles from "./ChatUi.module.css";
+import { Button } from "../componentsindex";
 const ChatUi = () => {
   const messages = [
     {
-      id: 1,
-      text: "Hi there! How are you doing?",
-      senderName: "Alice",
-      senderAvatar: images.user2,
-      sentByCurrentUser: false,
-    },
-    {
-      id: 2,
-      text: "I'm good, thanks for asking! How about you?",
+      senderId: 1,
+      content: "I'm doing pretty well, thanks.",
       senderName: "Bob",
-      senderAvatar: images.user4,
-
+      senderAvatar: images.user1,
+      chatGroupId: 12345,
       sentByCurrentUser: true,
     },
     {
-      id: 3,
-      text: "I'm doing pretty well, thanks.",
+      senderId: 2,
+      content: "I'm doing pretty well, thanks.",
       senderName: "Alice",
       senderAvatar: images.user2,
-
+      chatGroupId: 12345,
       sentByCurrentUser: false,
     },
     {
-      id: 3,
-      text: "I'm doing pretty well, thanks.",
+      senderId: 1,
+      content: "I'm doing pretty well, thanks.",
+      senderName: "bob",
+      senderAvatar: images.user1,
+      chatGroupId: 12345,
+      sentByCurrentUser: true,
+    },
+    {
+      senderId: 2,
+      content: "I'm doing pretty well, thanks.",
       senderName: "Alice",
       senderAvatar: images.user2,
-
+      chatGroupId: 12345,
       sentByCurrentUser: false,
     },
     {
-      id: 3,
-      text: "I'm doing pretty well, thanks.",
+      senderId: 1,
+      content: "I'm doing pretty well, thanks.",
+      senderName: "bob",
+      senderAvatar: images.user1,
+      chatGroupId: 12345,
+      sentByCurrentUser: true,
+    },
+    {
+      senderId: 2,
+      content: "I'm doing pretty well, thanks.",
       senderName: "Alice",
       senderAvatar: images.user2,
-
+      chatGroupId: 12345,
       sentByCurrentUser: false,
     },
     {
-      id: 3,
-      text: "I'm doing pretty well, thanks.",
+      senderId: 1,
+      content: "I'm doing pretty well, thanks.",
+      senderName: "bob",
+      senderAvatar: images.user1,
+      chatGroupId: 12345,
+      sentByCurrentUser: true,
+    },
+    {
+      senderId: 2,
+      content: "I'm doing pretty well, thanks.",
       senderName: "Alice",
       senderAvatar: images.user2,
-
+      chatGroupId: 12345,
+      sentByCurrentUser: false,
+    },
+    {
+      senderId: 1,
+      content: "I'm doing pretty well, thanks.",
+      senderName: "bob",
+      senderAvatar: images.user1,
+      chatGroupId: 12345,
+      sentByCurrentUser: true,
+    },
+    {
+      senderId: 2,
+      content: "I'm doing pretty well, thanks.",
+      senderName: "Alice",
+      senderAvatar: images.user2,
+      chatGroupId: 12345,
       sentByCurrentUser: false,
     },
   ];
@@ -61,10 +95,10 @@ const ChatUi = () => {
   return (
     <div className={styles.Container}>
       <div className={styles.box}>
-        {messages.map((message) => (
+        {messages.map((message, index) => (
           <Message
-            key={message.id}
-            text={message.text}
+            key={index}
+            content={message.content}
             senderName={message.senderName}
             senderAvatar={message.senderAvatar}
             sentByCurrentUser={message.sentByCurrentUser}
@@ -73,12 +107,14 @@ const ChatUi = () => {
       </div>
       <form className={styles.InputChatBox} onSubmit={handleMessageSubmit}>
         <input
-          type="text"
+          type="content"
           value={messageInput}
           onChange={(event) => setMessageInput(event.target.value)}
           placeholder="Type a message..."
         />
-        <button type="submit">Send</button>
+        <Button type="submit" btnName={"SEND"} handleClick={() => {}}>
+          Send
+        </Button>
       </form>
     </div>
   );
