@@ -5,7 +5,12 @@ import Router from "next/router";
 import axios, { addTokenToAxios } from "../lib/axios";
 import { useRouter } from "next/router";
 import { create as ipfsHttpClient } from "ipfs-http-client";
-import { ProblemSolverAddress, ProblemSolverABI } from "./constants";
+import {
+  ProblemSolverAddress,
+  ProblemSolverABI,
+  mintNftAddress,
+  mintNftABI,
+} from "./constants";
 import useAxios from "../hook/useAxios";
 import { toast } from "react-toastify";
 
@@ -28,6 +33,8 @@ const client = ipfsHttpClient({
 // fetch smart contract
 const fetchContract = (signerOrProvider) =>
   new ethers.Contract(ProblemSolverAddress, ProblemSolverABI, signerOrProvider);
+const fetchContractMint = (signerOrProvider) =>
+  new ethers.Contract(mintNftAddress, mintNftABI, signerOrProvider);
 //  connecting with smart contract
 const connectingWithSmartContract = async () => {
   try {
@@ -36,6 +43,18 @@ const connectingWithSmartContract = async () => {
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner();
     const contract = fetchContract(signer);
+    return contract;
+  } catch (error) {
+    toast.error("Something went wrong while connecting with contract");
+  }
+};
+const connectingWithSmartContractMint = async () => {
+  try {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+    const contract = fetchContractMint(signer);
     return contract;
   } catch (error) {
     toast.error("Something went wrong while connecting with contract");
@@ -193,7 +212,10 @@ export const ProblemSolverProvider = ({ children }) => {
       toast.error("Error uploading to IPFS");
     }
   };
-  //----------------------------------------------------
+  // -----------------------------------PROBLEMSOLVER ------------------------
+  // -----------------------------------PROBLEMSOLVER ------------------------
+  // -----------------------------------PROBLEMSOLVER ------------------------
+
   // smart contract function
   // create problem
   const CreateProblem = async (title, image, description) => {
@@ -348,6 +370,33 @@ export const ProblemSolverProvider = ({ children }) => {
     //   console.log("error", error);
     // }
   };
+  // -----------------------------------MINT NFT ------------------------
+  // -----------------------------------MINT NFT ------------------------
+  // -----------------------------------MINT NFT ------------------------
+  const mintNft = async (count, name, image, price, key) => {
+    if (!count || !name || !image || !price || !key)
+      console.log("data missing");
+    const data = JSON.stringify({ name, image, price, key });
+    try {
+      const added = await client.add(data);
+      const tokenURI = `${subdomain}/ipfs/${added.path}`;
+      const contract = await connectingWithSmartContractMint();
+      const transaction = await contract.mintNFT(count, tokenURI);
+      await transaction.wait();
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  const getNftInfo = async (tokenId) => {
+    if (!tokenId) console.log("data missing");
+    try {
+      const contract = await connectingWithSmartContractMint();
+      const transaction = await contract.getNFTInfo(tokenId);
+      await transaction.wait();
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
   return (
     <ProblemSolverContext.Provider
       value={{
@@ -367,6 +416,8 @@ export const ProblemSolverProvider = ({ children }) => {
         allUser,
         propData,
         getProblemById,
+        mintNft,
+        getNftInfo,
       }}
     >
       {children}
