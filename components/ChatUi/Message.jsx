@@ -15,7 +15,7 @@ const Message = ({ content, senderName, senderAvatar, sentByCurrentUser }) => {
           display: "flex",
           flexDirection: "column",
           alignItems: sentByCurrentUser ? "flex-end" : "flex-start",
-          width: "50%",
+          maxWidth: "65%",
         }}
       >
         <div style={{ display: "flex", flexDirection: "row" }}>
@@ -34,7 +34,7 @@ const Message = ({ content, senderName, senderAvatar, sentByCurrentUser }) => {
                 marginRight: sentByCurrentUser ? "0" : "10px",
               }}
             >
-              <Image
+              <img
                 src={senderAvatar}
                 width={50}
                 height={50}
@@ -46,16 +46,17 @@ const Message = ({ content, senderName, senderAvatar, sentByCurrentUser }) => {
               <span style={{ fontWeight: "bold" }}>{senderName}</span>
             </div>
           </div>
-          <div
-            style={{
-              backgroundColor: sentByCurrentUser ? "#007bff" : "#e6e6e6",
-              color: sentByCurrentUser ? "#fff" : "#333",
-              padding: "10px",
-              borderRadius: "10px",
-              maxWidth: "80%",
-            }}
-          >
-            {content}
+          <div>
+            <div
+              style={{
+                backgroundColor: sentByCurrentUser ? "#007bff" : "#e6e6e6",
+                color: sentByCurrentUser ? "#fff" : "#333",
+                padding: "10px",
+                borderRadius: "10px",
+              }}
+            >
+              {content}
+            </div>
           </div>
         </div>
       </div>

@@ -23,17 +23,23 @@ const PropCard = ({ PropData }) => {
                 <div className={Style.Container_Top}>
                   <div className={Style.PropCard_box_detail_top}>
                     <div className={Style.PropCard_box_detail_Status}>
-                      {el.selecting === false ? (
+                      {el.status === "waiting" ? (
                         <div
                           className={Style.PropCard_box_detail_Status_unsolved}
                         >
                           Unsolved
                         </div>
-                      ) : (
+                      ) : el.status == "onprogress" ? (
                         <div
                           className={Style.PropCard_box_detail_Status_solved}
                         >
                           Solving
+                        </div>
+                      ) : (
+                        <div
+                          className={Style.PropCard_box_detail_Status_solved}
+                        >
+                          Solved
                         </div>
                       )}
                     </div>

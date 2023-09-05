@@ -1,109 +1,48 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Message from "./Message";
 import images from "../../img/index";
 import styles from "./ChatUi.module.css";
 import { Button } from "../componentsindex";
-const ChatUi = () => {
-  const messages = [
-    {
-      senderId: 1,
-      content: "I'm doing pretty well, thanks.",
-      senderName: "Bob",
-      senderAvatar: images.user1,
-      chatGroupId: 12345,
-      sentByCurrentUser: true,
-    },
-    {
-      senderId: 2,
-      content: "I'm doing pretty well, thanks.",
-      senderName: "Alice",
-      senderAvatar: images.user2,
-      chatGroupId: 12345,
-      sentByCurrentUser: false,
-    },
-    {
-      senderId: 1,
-      content: "I'm doing pretty well, thanks.",
-      senderName: "bob",
-      senderAvatar: images.user1,
-      chatGroupId: 12345,
-      sentByCurrentUser: true,
-    },
-    {
-      senderId: 2,
-      content: "I'm doing pretty well, thanks.",
-      senderName: "Alice",
-      senderAvatar: images.user2,
-      chatGroupId: 12345,
-      sentByCurrentUser: false,
-    },
-    {
-      senderId: 1,
-      content: "I'm doing pretty well, thanks.",
-      senderName: "bob",
-      senderAvatar: images.user1,
-      chatGroupId: 12345,
-      sentByCurrentUser: true,
-    },
-    {
-      senderId: 2,
-      content: "I'm doing pretty well, thanks.",
-      senderName: "Alice",
-      senderAvatar: images.user2,
-      chatGroupId: 12345,
-      sentByCurrentUser: false,
-    },
-    {
-      senderId: 1,
-      content: "I'm doing pretty well, thanks.",
-      senderName: "bob",
-      senderAvatar: images.user1,
-      chatGroupId: 12345,
-      sentByCurrentUser: true,
-    },
-    {
-      senderId: 2,
-      content: "I'm doing pretty well, thanks.",
-      senderName: "Alice",
-      senderAvatar: images.user2,
-      chatGroupId: 12345,
-      sentByCurrentUser: false,
-    },
-    {
-      senderId: 1,
-      content: "I'm doing pretty well, thanks.",
-      senderName: "bob",
-      senderAvatar: images.user1,
-      chatGroupId: 12345,
-      sentByCurrentUser: true,
-    },
-    {
-      senderId: 2,
-      content: "I'm doing pretty well, thanks.",
-      senderName: "Alice",
-      senderAvatar: images.user2,
-      chatGroupId: 12345,
-      sentByCurrentUser: false,
-    },
-  ];
+import { ProblemSolverContext } from "../../Context/ProblemSolverContext";
+const ChatUi = ({ chatGroup, messages, handleSubmit }) => {
   const [messageInput, setMessageInput] = useState("");
+  const { currentAccount } = useContext(ProblemSolverContext);
+  const boxRef = useRef(null);
+
+  const currentId = (chatGroup?.members || []).find(
+    ({ address }) => address == currentAccount
+  )?._id;
+
   const handleMessageSubmit = (event) => {
     event.preventDefault();
-    console.log(messageInput);
+    handleSubmit(messageInput);
     setMessageInput("");
   };
+
+  // scroll to bottom of chat box
+  useEffect(() => {
+    if (!boxRef.current) return;
+
+    boxRef.current.scrollTop = boxRef.current.scrollHeight;
+  }, [messages]);
+
   return (
     <div className={styles.Container}>
-      <div className={styles.box}>
-        {messages.map((message, index) => (
-          <Message
-            key={index}
-            content={message.content}
-            senderName={message.senderName}
-            senderAvatar={message.senderAvatar}
-            sentByCurrentUser={message.sentByCurrentUser}
-          />
-        ))}
+      <div className={styles.box} ref={boxRef}>
+        {messages.map((message, index) => {
+          const user = chatGroup.members.find(
+            ({ _id }) => _id == message.senderId
+          );
+          return (
+            <Message
+              key={message._id}
+              content={message.content}
+              senderName={user.fullName}
+              senderAvatar={user.avatarUrl}
+              sentByCurrentUser={message.senderId == currentId}
+            />
+          );
+        })}
       </div>
       <form className={styles.InputChatBox} onSubmit={handleMessageSubmit}>
         <input

@@ -26,7 +26,7 @@ const PostBid = ({ problemId }) => {
   const [price, setPrice] = useState(0);
   const [bids, setBids] = useState([]);
   const [lookUp, setLookUp] = useState([]);
-  const rounter = useRouter();
+  const router = useRouter();
   const { socket } = useSocket("problem");
   const [problem, setProblem] = useState({});
 
@@ -108,9 +108,10 @@ const PostBid = ({ problemId }) => {
       value
     );
     // if (selected) {
-    //   rounter.push(`/connectRoom/`);
+    //   router.push(`/connectRoom/`);
     // }
   };
+  console.log(currentAccount);
 
   return (
     <div className={styles.commentBox}>
@@ -181,6 +182,7 @@ const PostBid = ({ problemId }) => {
                   <h3>{ethers.utils.formatUnits(el.amount)} klay</h3>
                 </div>
                 {currentAccount &&
+                problem.status === "waiting" &&
                 currentAccount.toString().toLowerCase() ===
                   problem.author.address?.toString().toLowerCase() ? (
                   <div className={styles.showbox_container_userInfor_selecbox}>
@@ -196,6 +198,20 @@ const PostBid = ({ problemId }) => {
                         }
                         className={styles.button}
                         btnName="Select"
+                      ></Button>
+                    </div>
+                  </div>
+                ) : problem.status === "onprogress" &&
+                  (currentAccount.toLowerCase() === problem.author.address ||
+                    currentAccount.toLowerCase()) ? (
+                  <div className={styles.showbox_container_userInfor_selecbox}>
+                    <div>
+                      <Button
+                        classStyle={styles.button}
+                        btnName="Go to chat"
+                        handleClick={() =>
+                          router.push(`/problems/${problemId}/chat`)
+                        }
                       ></Button>
                     </div>
                   </div>
