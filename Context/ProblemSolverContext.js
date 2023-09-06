@@ -68,10 +68,6 @@ export const ProblemSolverProvider = ({ children }) => {
   const [data, setData] = useState([]);
   const [allUser, setAllUser] = useState("");
   const [propData, setPropData] = useState([]);
-  const { operation: getUserExis, data: news } = useAxios(
-    `/api/user?address=${currentAccount}`,
-    "GET"
-  );
   const { operation: getAllUser, data: get } = useAxios(`/api/user`, "GET");
   const router = useRouter();
   // check if wallet connected
@@ -153,11 +149,15 @@ export const ProblemSolverProvider = ({ children }) => {
   //----------------------------------------------------
   // get current userData in database
   useEffect(() => {
-    if (currentAccount) {
-      getUserExis().then(({ user }) => {
-        setUserData(user);
-      });
-    }
+    if (!currentAccount) return;
+
+    const getUser = async () => {
+      const res = await axios.get(`/api/user?address=${currentAccount}`);
+      const { user } = res.data;
+      setUserData(user);
+    };
+
+    getUser();
   }, [currentAccount]);
 
   // fetch all data from database

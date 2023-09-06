@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useContext } from "react";
 
 //INTERNAL IMPORT
-import Style from "../styles/author.module.css";
-import { Banner } from "../subPages/collectionPage/collectionIndex";
-import { Brand, Title, Spinner } from "../components/componentsindex";
-import images from "../img";
-import { AuthorNFTCardBox } from "../subPages/authorPage/componentIndex";
+import Style from "../../styles/author.module.css";
+import { Banner } from "../../subPages/collectionPage/collectionIndex";
+import { Brand, Title, Spinner } from "../../components/componentsindex";
+import images from "../../img";
+import { AuthorNFTCardBox } from "../../subPages/authorPage/componentIndex";
 import {
   AuthorProfileCard,
   AuthorTaps,
-} from "../subPages/authorPage/componentIndex";
-import { ProblemSolverContext } from "../Context/ProblemSolverContext";
+} from "../../subPages/authorPage/componentIndex";
+import { ProblemSolverContext } from "../../Context/ProblemSolverContext";
+import { useRouter } from "next/router";
+import axios from "../../lib/axios";
 // import sm data
 const array1 = [
   {
@@ -84,14 +86,26 @@ const profile = () => {
   const [isMyNft, setIsMyNft] = useState(false);
   const [listed, setListed] = useState(array2);
   const [myNft, setMyNft] = useState(array1);
+  const [user, setUser] = useState({});
+  const router = useRouter();
+  const { userId } = router.query;
 
-  // sm data
-  const { currentAccount, userData } = useContext(ProblemSolverContext);
+  useEffect(() => {
+    if (!userId) return;
+
+    const getUser = async () => {
+      const res = await axios(`/api/user/${userId}`);
+      const { user } = res.data;
+      setUser(user);
+      console.log(user);
+    };
+    getUser();
+  }, [userId]);
 
   return (
     <div className={Style.author}>
       <Banner bannerImage={images.background} />
-      <AuthorProfileCard currentAccount={currentAccount} userData={userData} />
+      <AuthorProfileCard userData={user} />
       <AuthorTaps setIsListed={setIsListed} setIsMyNft={setIsMyNft} />
       <AuthorNFTCardBox
         isListed={isListed}

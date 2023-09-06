@@ -160,7 +160,7 @@ const PostBid = ({ problemId }) => {
                 <div className={styles.showbox_container_userInfor_box}>
                   <Link
                     href={{
-                      pathname: `/user/${el.expert._id}`,
+                      pathname: `/profile/${el.expert._id}`,
                     }}
                   >
                     <div className={styles.showbox_container_userInfor_img}>

@@ -13,53 +13,31 @@ import { Button } from "../../../components/componentsindex";
 import useAxios from "../../../hook/useAxios";
 import { useForm } from "react-hook-form";
 import { ProblemSolverContext } from "../../../Context/ProblemSolverContext";
+import axios from "../../../lib/axios";
 
 const Form = ({ fileUrl }) => {
   const { currentAccount, userData } = useContext(ProblemSolverContext);
   const [updateURL, setUpdateURL] = useState("");
   const { register, handleSubmit, reset } = useForm();
   const defaulInput = {
-    name: "",
+    fullName: "",
     email: "",
-    website: "",
-    facebook: "",
-    twitter: "",
-    instagram: "",
     description: "",
-    images: "",
+    avatarUrl: "",
     address: "",
   };
   const [forms, setForms] = useState(defaulInput);
 
-  // method
-  const { operation: createUser } = useAxios("/api/v1/users", "POST");
-  const { operation: updateUser } = useAxios(updateURL, "PATCH");
-
-  // change URL
-  useEffect(() => {
-    if (userData) {
-      let url = `/api/v1/users/${userData[0]?._id}`;
-      setUpdateURL(url);
-      setForms(userData);
-      reset(userData);
-    }
-  }, [userData]);
-
   // create update user
-  const onSubmit = (data) => {
-    let dataUpdate = { ...data };
-    // if user not exit create user
-    if (userData.length == 0) {
-      dataUpdate.address = currentAccount;
-      dataUpdate.images = fileUrl;
-      createUser(dataUpdate);
-      setForms(dataUpdate);
-    }
-    // if user exits, just update information
-    else {
-      dataUpdate.images = fileUrl;
-      updateUser(dataUpdate);
-    }
+  const onSubmit = async (data) => {
+    await axios.patch("/api/user/common-fields", {
+      fullName: data.name,
+      email: data.email,
+      description: data.description,
+      avatarUrl: fileUrl || undefined,
+    });
+
+    window.location.reload();
   };
 
   return (
@@ -67,11 +45,11 @@ const Form = ({ fileUrl }) => {
       <div className={Style.Form_box}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className={Style.Form_box_input}>
-            <label htmlFor="name">Username</label>
+            <label htmlFor="name">Name</label>
             <input
-              placeholder="Your usename"
+              placeholder="Your name"
               {...register("name")}
-              defaultValue={forms[0]?.name}
+              defaultValue={forms[0]?.fullName}
               className={Style.Form_box_input_userName}
             />
           </div>
@@ -104,7 +82,7 @@ const Form = ({ fileUrl }) => {
             ></textarea>
           </div>
 
-          <div className={Style.Form_box_input}>
+          {/* <div className={Style.Form_box_input}>
             <label htmlFor="website">Website</label>
             <div className={Style.Form_box_input_box}>
               <div className={Style.Form_box_input_box_icon}>
@@ -182,11 +160,11 @@ const Form = ({ fileUrl }) => {
                 <MdOutlineContentCopy />
               </div>
             </div>
-          </div>
+          </div> */}
           <div className={Style.Form_box_btn}>
             <Button
               btnName="Upload profile"
-              handleClick={() => onSubmit}
+              handleClick={() => handleSubmit(onSubmit)}
               type="submit"
               classStyle={Style.button}
             />

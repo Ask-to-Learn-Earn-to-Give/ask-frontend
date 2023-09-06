@@ -19,7 +19,7 @@ import Style from "./AuthorProfileCard.module.css";
 import images from "../../../img";
 import { Button } from "../../../components/componentsindex.js";
 
-const AuthorProfileCard = ({ currentAccount, userData }) => {
+const AuthorProfileCard = ({ userData }) => {
   const [share, setShare] = useState(false);
   const [report, setReport] = useState(false);
   //copyAddress function
@@ -51,35 +51,25 @@ const AuthorProfileCard = ({ currentAccount, userData }) => {
     <div className={Style.AuthorProfileCard}>
       <div className={Style.AuthorProfileCard_box}>
         <div className={Style.AuthorProfileCard_box_img}>
-          {userData?.length && userData[0]?.images ? (
-            <Image
-              src={userData[0]?.images}
-              className={Style.AuthorProfileCard_box_img_img}
-              alt="NFT IMAGES"
-              width={220}
-              height={220}
-            />
-          ) : (
-            <Image
-              src={images.user2}
-              className={Style.AuthorProfileCard_box_img_img}
-              alt="NFT IMAGES"
-              width={220}
-              height={220}
-            />
-          )}
+          <img
+            src={userData?.avatarUrl}
+            className={Style.AuthorProfileCard_box_img_img}
+            alt="NFT IMAGES"
+            width={220}
+            height={220}
+          />
         </div>
 
         <div className={Style.AuthorProfileCard_box_info}>
           <h2>
-            {userData?.length ? userData[0].name : currentAccount.slice(0, 12)}
+            {userData?.fullName}
             <span>
               <MdVerified />
             </span>{" "}
           </h2>
 
           <div className={Style.AuthorProfileCard_box_info_address}>
-            <input type="text" defaultValue={currentAccount} id="myInput" />
+            <input type="text" defaultValue={userData.address} id="myInput" />
             <FiCopy
               onClick={() => copyAddress()}
               className={Style.AuthorProfileCard_box_info_address_icon}
@@ -87,21 +77,6 @@ const AuthorProfileCard = ({ currentAccount, userData }) => {
           </div>
 
           <p>{userData && userData[0]?.description}</p>
-
-          <div className={Style.AuthorProfileCard_box_info_social}>
-            <a href="#">
-              <TiSocialFacebook />
-            </a>
-            <a href="#">
-              <TiSocialInstagram />
-            </a>
-            <a href="#">
-              <TiSocialLinkedin />
-            </a>
-            <a href="#">
-              <TiSocialYoutube />
-            </a>
-          </div>
         </div>
 
         <div className={Style.AuthorProfileCard_box_share}>
@@ -110,54 +85,6 @@ const AuthorProfileCard = ({ currentAccount, userData }) => {
             onClick={() => openShare()}
             className={Style.AuthorProfileCard_box_share_icon}
           />
-
-          {share && (
-            <div className={Style.AuthorProfileCard_box_share_upload}>
-              <p>
-                <span>
-                  <TiSocialFacebook />
-                </span>{" "}
-                {""}
-                Facebook
-              </p>
-              <p>
-                <span>
-                  <TiSocialInstagram />
-                </span>{" "}
-                {""}
-                Instragram
-              </p>
-              <p>
-                <span>
-                  <TiSocialLinkedin />
-                </span>{" "}
-                {""}
-                LinkedIn
-              </p>
-              <p>
-                <span>
-                  <TiSocialYoutube />
-                </span>{" "}
-                {""}
-                YouTube
-              </p>
-            </div>
-          )}
-
-          <BsThreeDots
-            onClick={() => openReport()}
-            className={Style.AuthorProfileCard_box_share_icon}
-          />
-
-          {report && (
-            <p className={Style.AuthorProfileCard_box_share_report}>
-              <span>
-                <MdOutlineReportProblem />
-              </span>{" "}
-              {""}
-              Report abouse
-            </p>
-          )}
         </div>
       </div>
     </div>

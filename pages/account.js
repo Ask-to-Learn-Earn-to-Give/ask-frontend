@@ -36,25 +36,17 @@ const account = () => {
         <div className={Style.account_box_img} {...getRootProps()}>
           <input {...getInputProps()} />
 
-          {userData?.length && userData[0]?.images ? (
-            <Image
-              src={userData[0]?.images}
-              alt="nft image"
-              width={200}
-              height={200}
-              className={Style.account_box_img_img}
-            />
-          ) : fileUrl ? (
-            <Image
+          {fileUrl ? (
+            <img
               src={fileUrl}
               alt="nft image"
-              width={200}
-              height={200}
+              width={150}
+              height={150}
               className={Style.account_box_img_img}
             />
           ) : (
-            <Image
-              src={images.user2}
+            <img
+              src={userData?.avatarUrl}
               alt="account upload"
               width={150}
               height={150}

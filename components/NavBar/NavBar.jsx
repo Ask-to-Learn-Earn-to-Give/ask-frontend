@@ -187,25 +187,14 @@ const NavBar = () => {
                   />
                 )} */}
 
-                {userData?.length && userData[0]?.images ? (
-                  <Image
-                    src={userData[0]?.images}
-                    alt="Profile"
-                    width={40}
-                    height={40}
-                    onClick={() => openProfile()}
-                    className={Style.navbar_container_right_profile}
-                  />
-                ) : (
-                  <Image
-                    src={images.user2}
-                    alt="Profile"
-                    width={40}
-                    height={40}
-                    onClick={() => openProfile()}
-                    className={Style.navbar_container_right_profile}
-                  />
-                )}
+                <img
+                  src={userData?.avatarUrl}
+                  alt="Profile"
+                  width={40}
+                  height={40}
+                  onClick={() => openProfile()}
+                  className={Style.navbar_container_right_profile}
+                />
                 {profile && (
                   <Profile
                     currentAccount={currentAccount}

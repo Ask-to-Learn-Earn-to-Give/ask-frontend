@@ -43,9 +43,6 @@ const PropCard = ({ PropData }) => {
                         </div>
                       )}
                     </div>
-                    <div className={Style.PropCard_box_detail_Date}>
-                      <p>23-Aug-2023</p>
-                    </div>
                   </div>
                   <div className={Style.PropCard_box_detail_bot}>
                     <div className={Style.PropCard_box_detail_bot_image}>
@@ -66,9 +63,6 @@ const PropCard = ({ PropData }) => {
                       </div>
                     </div>
                   </div>
-                  <div className={Style.PropCard_box_detail_icon}>
-                    <p>icon 1 s </p>
-                  </div>
                 </div>
 
                 <div className={Style.PropCard_box_User}>
@@ -84,7 +78,7 @@ const PropCard = ({ PropData }) => {
                     ) : (
                       <Image
                         className={Style.PropCard_box_User_img_img}
-                        src={images.user3}
+                        src={el.author?.avatarUrl}
                         alt="profile image"
                         width={100}
                         height={100}
@@ -95,13 +89,13 @@ const PropCard = ({ PropData }) => {
                     <p>Posted by</p>
                   </div>
                   <div>
-                    <h4>{el.name}</h4>
+                    <h4>{el.author?.fullNamee}</h4>
                   </div>
                   <div>
                     <p>Address</p>
                   </div>
                   <div>
-                    <h4>{el.address?.slice(0, 8)}...</h4>
+                    <h4>{el.author?.address?.slice(0, 8)}...</h4>
                   </div>
                 </div>
               </div>

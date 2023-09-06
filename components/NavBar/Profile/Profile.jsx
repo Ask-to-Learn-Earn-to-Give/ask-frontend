@@ -14,36 +14,19 @@ const Profile = ({ currentAccount, userData }) => {
   return (
     <div className={Style.profile}>
       <div className={Style.profile_account}>
-        {/* {userData[0]?.images.length == 0 && (
-          <Image
-            src={images.user2}
-            alt="user profile"
-            width={50}
-            height={50}
-            className={Style.profile_account_img}
-          />
-        )} */}
-        {userData?.length && userData[0]?.images ? (
-          <Image
-            src={userData[0]?.images}
-            alt="user profile"
-            width={50}
-            height={50}
-            className={Style.profile_account_img}
-          />
-        ) : (
-          <Image
-            src={images.user2}
-            alt="user profile"
-            width={50}
-            height={50}
-            className={Style.profile_account_img}
-          />
-        )}
+        <img
+          src={userData?.avatarUrl}
+          alt="user profile"
+          width={50}
+          height={50}
+          className={Style.profile_account_img}
+        />
         {currentAccount && (
           <div className={Style.profile_account_info}>
-            <p>{currentAccount.slice(0, 6)}</p>
-            <small>{currentAccount.slice(0, 12)}...</small>
+            <p>{userData.fullName}</p>
+            <small>
+              {currentAccount.slice(0, 8) + "..." + currentAccount.slice(-4)}
+            </small>
           </div>
         )}
       </div>
@@ -52,7 +35,7 @@ const Profile = ({ currentAccount, userData }) => {
         <div className={Style.profile_menu_one}>
           <div
             className={Style.profile_menu_one_item}
-            onClick={() => router.push("/profile")}
+            onClick={() => router.push(`/profile/${userData._id}`)}
           >
             <FaUserAlt />
             <p>MyProfile</p>
