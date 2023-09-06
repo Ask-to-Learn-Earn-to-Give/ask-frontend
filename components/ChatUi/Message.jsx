@@ -42,7 +42,14 @@ const Message = ({ content, senderName, senderAvatar, sentByCurrentUser }) => {
                 style={{ borderRadius: "50%" }}
               />
             </div>
-            <div style={{ textAlign: "center" }}>
+            <div
+              style={{
+                textAlign: "center",
+                whiteSpace: "pre-wrap",
+                wordWrap: "break-word",
+                maxWidth: "80px",
+              }}
+            >
               <span style={{ fontWeight: "bold" }}>{senderName}</span>
             </div>
           </div>
@@ -53,9 +60,12 @@ const Message = ({ content, senderName, senderAvatar, sentByCurrentUser }) => {
                 color: sentByCurrentUser ? "#fff" : "#333",
                 padding: "10px",
                 borderRadius: "10px",
+                whiteSpace: "pre-wrap",
+                wordWrap: "break-word",
+                maxWidth: "400px",
               }}
             >
-              {content}
+              <div>{content}</div>
             </div>
           </div>
         </div>

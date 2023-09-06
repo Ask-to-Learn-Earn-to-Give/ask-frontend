@@ -45,15 +45,24 @@ const ChatUi = ({ chatGroup, messages, handleSubmit }) => {
         })}
       </div>
       <form className={styles.InputChatBox} onSubmit={handleMessageSubmit}>
-        <input
-          type="content"
-          value={messageInput}
-          onChange={(event) => setMessageInput(event.target.value)}
-          placeholder="Type a message..."
-        />
-        <Button type="submit" btnName={"SEND"} handleClick={() => {}}>
-          Send
-        </Button>
+        <div style={{ maxWidth: "700px", overflowY: "scroll" }}>
+          <input
+            type="text"
+            style={{
+              width: "650px",
+              whiteSpace: "pre-wrap",
+              wordWrap: "break-word",
+              overflowWrap: "break-word",
+            }}
+            value={messageInput}
+            onChange={(event) => setMessageInput(event.target.value)}
+            placeholder="Type a message..."
+          />
+        </div>
+
+        {/* <Button type="submit" btnName={"SEND"} handleClick={() => {}}>
+    Send
+  </Button> */}
       </form>
     </div>
   );
