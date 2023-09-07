@@ -89,7 +89,7 @@ const PropCard = ({ PropData }) => {
                     <p>Posted by</p>
                   </div>
                   <div>
-                    <h4>{el.author?.fullNamee}</h4>
+                    <h4>{el.author?.fullName}</h4>
                   </div>
                   <div>
                     <p>Address</p>

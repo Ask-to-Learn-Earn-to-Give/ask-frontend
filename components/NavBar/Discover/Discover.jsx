@@ -13,14 +13,10 @@ const Discover = ({ currentAccount }) => {
       link: "problems",
       protect: "problems",
     },
-    {
-      name: "Your Profile",
-      link: "profile",
-      protect: "connectWallet",
-    },
+
     {
       name: "Create Question",
-      link: "create",
+      link: "problems/create",
       protect: "connectWallet",
     },
     {

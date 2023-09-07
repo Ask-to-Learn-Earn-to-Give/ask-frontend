@@ -6,19 +6,28 @@ import { Button } from "../componentsindex";
 import { ProblemSolverContext } from "../../Context/ProblemSolverContext";
 const ChatUi = ({ chatGroup, messages, handleSubmit }) => {
   const [messageInput, setMessageInput] = useState("");
-  const { currentAccount } = useContext(ProblemSolverContext);
+  const { currentAccount, solvedProblem, unSolvedProblem } =
+    useContext(ProblemSolverContext);
   const boxRef = useRef(null);
 
   const currentId = (chatGroup?.members || []).find(
     ({ address }) => address == currentAccount
   )?._id;
+  console.log("messages", messages);
+  console.log("currentAccount", currentAccount);
 
   const handleMessageSubmit = (event) => {
     event.preventDefault();
     handleSubmit(messageInput);
     setMessageInput("");
   };
-
+  // handle solve problem
+  const handleSolverProblem = () => {
+    console.log("hi");
+  };
+  const handleUnSolverProblem = () => {
+    console.log("ba");
+  };
   // scroll to bottom of chat box
   useEffect(() => {
     if (!boxRef.current) return;
@@ -44,6 +53,7 @@ const ChatUi = ({ chatGroup, messages, handleSubmit }) => {
           );
         })}
       </div>
+
       <form className={styles.InputChatBox} onSubmit={handleMessageSubmit}>
         <div style={{ maxWidth: "700px", overflowY: "scroll" }}>
           <input
@@ -64,6 +74,19 @@ const ChatUi = ({ chatGroup, messages, handleSubmit }) => {
     Send
   </Button> */}
       </form>
+      <div className={styles.button_box}>
+        <h1>Your problems has Solved?</h1>
+        <div className={styles.button_box_button}>
+          <Button
+            btnName={" Solved"}
+            handleClick={() => handleSolverProblem()}
+          ></Button>
+          <Button
+            btnName={"UnSolved"}
+            handleClick={() => handleUnSolverProblem()}
+          ></Button>
+        </div>
+      </div>
     </div>
   );
 };
