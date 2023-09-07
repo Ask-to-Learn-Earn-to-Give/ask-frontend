@@ -21,8 +21,21 @@
     border: none;
     padding: 20px 20px;
 }
+
 .InputChatBox button{
     height: 100px;
     margin-left: 20px;
     border: none;
+}
+.button_box {
+    width: 650px;
+    margin-top: 50px;
+}
+.button_box_button {
+    display: flex;
+    justify-content: center;
+    margin: 20px 20px;
+}
+.button_box_button button {
+    margin: 0px 20px;
 }

@@ -370,6 +370,29 @@ export const ProblemSolverProvider = ({ children }) => {
     //   console.log("error", error);
     // }
   };
+  const solvedProblem = async (_problemId, _expert) => {
+    try {
+      const contract = await connectingWithSmartContract();
+      const transaction = await contract.solvedProblem(_problemId, _expert);
+      await transaction.wait();
+      console.log("Solved Problem successfully");
+      return true;
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  const unSolvedProblem = async (_problemId) => {
+    try {
+      const contract = await connectingWithSmartContract();
+      const transaction = await contract.unSolvedProblem(_problemId);
+      await transaction.wait();
+      console.log("Solved Problem successfully");
+      return true;
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   // -----------------------------------MINT NFT ------------------------
   // -----------------------------------MINT NFT ------------------------
   // -----------------------------------MINT NFT ------------------------
@@ -418,6 +441,8 @@ export const ProblemSolverProvider = ({ children }) => {
         getProblemById,
         mintNft,
         getNftInfo,
+        solvedProblem,
+        unSolvedProblem,
       }}
     >
       {children}
