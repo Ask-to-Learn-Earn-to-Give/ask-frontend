@@ -24,9 +24,7 @@ const searchPage = () => {
     }
   }, [propData]);
   const onHandleSearch = (value) => {
-    const filtereData = propData.filter(({ title }) =>
-      title().includes(value())
-    );
+    const filtereData = propData.filter(({ title }) => title.includes(value));
     if (filtereData.length === 0) {
       setDataCall(dataCopy);
     } else {
