@@ -36,7 +36,7 @@ const searchPage = () => {
       setDataCall(propData);
     }
   };
-
+  console.log("pro", dataCall);
   return (
     <div className={Style.searchPage}>
       <Banner bannerImage={images.background} />

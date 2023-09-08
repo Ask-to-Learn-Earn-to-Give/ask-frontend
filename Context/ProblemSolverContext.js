@@ -188,14 +188,6 @@ export const ProblemSolverProvider = ({ children }) => {
       if (!obj2)
         return {
           ...obj1,
-          description: "",
-          email: "",
-          facebook: "",
-          images: "",
-          instagram: "",
-          name: "",
-          twitter: "",
-          website: "",
         };
       return { ...obj1, ...obj2 };
     });
@@ -457,6 +449,7 @@ export const ProblemSolverProvider = ({ children }) => {
       console.log("error", error);
     }
   };
+  console.log("data", data);
   return (
     <ProblemSolverContext.Provider
       value={{
