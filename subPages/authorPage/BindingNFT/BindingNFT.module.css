@@ -1,8 +1,8 @@
 .chat {
     display: flex;
     flex-direction: column;
-    max-height: 1200px;
-    height: 1050px;
+    max-height: 1050px;
+    max-height: 1050px;
     padding: 4rem;
     background-color: var(--text-background);
     overflow-y: scroll;

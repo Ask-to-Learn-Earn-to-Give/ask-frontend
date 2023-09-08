@@ -1,21 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { BsImage } from "react-icons/bs";
-import { MdVerified, MdTimer } from "react-icons/md";
-import { AiFillFire, AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import axios from "../../lib/axios";
 //INTERNAL IMPORT
 import Style from "./NFTCardTwo.module.css";
 import Link from "next/link";
-const NFTCardTwo = ({ NFTData }) => {
+const NFTCardTwo = ({ NFTData, setMessages, setChatGroup }) => {
+  console.log("nftdata", NFTData);
+
+  const fetchData = async (_id) => {
+    const { messages } = (
+      await axios.get(`/api/chat/${_id}/messages?skip=0&limit=1024`)
+    ).data;
+    const { chatGroup } = (await axios.get(`/api/chat/${_id}`)).data;
+    setMessages(messages);
+    setChatGroup(chatGroup);
+  };
+  const getMessId = async (id) => {
+    await fetchData(id);
+  };
   return (
     <div className={Style.NFTCardTwo}>
       {NFTData &&
         NFTData?.map((el, i) => (
-          <Link href={{ pathname: "/", query: el }} key={i + 1}>
-            <div className={Style.NFTCardTwo_box} key={i + 1}>
+          <div key={i + 1}>
+            <div
+              className={Style.NFTCardTwo_box}
+              onClick={() => getMessId(el?.key)}
+            >
               <div className={Style.NFTCardTwo_box_img}>
                 <Image
-                  src={el.image}
+                  src={el?.image}
                   alt="NFT"
                   width={350}
                   height={350}
@@ -24,26 +38,26 @@ const NFTCardTwo = ({ NFTData }) => {
                 />
               </div>
               <div className={Style.NFTCardTwo_box_info_info_title}>
-                <p>{el.title}</p>
+                <p>{el?.name}</p>
               </div>
               <div className={Style.NFTCardTwo_box_info}>
                 <div className={Style.NFTCardTwo_box_info_box}>
                   <small> price</small>
-                  <p>{el.price} ETH</p>
+                  <p>{el?.price} Klay</p>
                 </div>
                 <div className={Style.NFTCardTwo_box_info_info}>
                   <div className={Style.NFTCardTwo_box_info_info_id}>
-                    <p>Askify# {el.id}</p>
+                    <p>Askify# {el.tokenId?.slice(0, 4)}</p>
                   </div>
                   <div className={Style.NFTCardTwo_box_info_info_expert}>
-                    <p>
+                    {/* <p>
                       with <span>{el.expert}</span>
-                    </p>
+                    </p> */}
                   </div>
                 </div>
               </div>
             </div>
-          </Link>
+          </div>
         ))}
     </div>
   );

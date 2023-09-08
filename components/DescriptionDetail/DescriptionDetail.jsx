@@ -12,7 +12,6 @@ const DescriptionDetail = ({ problemId }) => {
 
   const getDetail = async (_id) => {
     const detail = await getProblemById(_id);
-    console.log("detail", detail);
     setPostDetail(detail);
   };
 

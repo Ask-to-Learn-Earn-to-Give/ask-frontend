@@ -14,7 +14,7 @@ const DropZone = ({
   description,
 
   uploadToIPFS,
-  createNFT,
+  mintNft,
   setImage,
 }) => {
   const [fileUrl, setFileUrl] = useState(null);
@@ -60,12 +60,7 @@ const DropZone = ({
         fileUrl && (
           <aside className={Style.DropZone_box_aside}>
             <div className={Style.DropZone_box_aside_box}>
-              <Image
-                src={`https://${fileUrl}`}
-                alt="nft image"
-                width={200}
-                height={200}
-              />
+              <Image src={fileUrl} alt="nft image" width={200} height={200} />
 
               <div className={Style.DropZone_box_aside_box_preview}>
                 <div className={Style.DropZone_box_aside_box_preview_one}>

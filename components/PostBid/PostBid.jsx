@@ -111,7 +111,6 @@ const PostBid = ({ problemId }) => {
     //   router.push(`/connectRoom/`);
     // }
   };
-  console.log(currentAccount);
 
   return (
     <div className={styles.commentBox}>
@@ -232,7 +231,7 @@ const PostBid = ({ problemId }) => {
                 {el.description}
               </div>
               <div className={styles.post_date}>
-                <p>Post date: 23-8-2023</p>
+                <p>Post date: 2023</p>
               </div>
             </div>
           </div>

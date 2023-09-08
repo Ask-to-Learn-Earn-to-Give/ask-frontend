@@ -10,7 +10,7 @@ import useSocket from "../../../hook/useSocket";
 import { useRouter } from "next/router";
 import axios from "../../../lib/axios";
 const ConnectRoom = () => {
-  const { uploadToIPFS } = useContext(ProblemSolverContext);
+  const { uploadToIPFS, mintNft } = useContext(ProblemSolverContext);
   const [uploadedUrl, setUploadedUrl] = useState(null);
   const handleUpload = async () => {
     const data = {
@@ -86,7 +86,12 @@ const ConnectRoom = () => {
         </div>
         <div>
           <h1>Create NFT</h1>
-          <UloadNFT />
+          <UloadNFT
+            chatGroup={chatGroup}
+            messages={messages}
+            mintNft={mintNft}
+            uploadToIPFS={uploadToIPFS}
+          />
         </div>
       </div>
     </div>

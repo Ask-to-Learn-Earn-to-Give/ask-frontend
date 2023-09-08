@@ -13,8 +13,6 @@ const ChatUi = ({ chatGroup, messages, handleSubmit }) => {
   const currentId = (chatGroup?.members || []).find(
     ({ address }) => address == currentAccount
   )?._id;
-  console.log("messages", messages);
-  console.log("currentAccount", currentAccount);
 
   const handleMessageSubmit = (event) => {
     event.preventDefault();
@@ -22,11 +20,21 @@ const ChatUi = ({ chatGroup, messages, handleSubmit }) => {
     setMessageInput("");
   };
   // handle solve problem
-  const handleSolverProblem = () => {
-    console.log("hi");
+  const handleSolverProblem = async () => {
+    const probId = getNumberFromName(chatGroup?.name);
+    if (probId && expertAddress) {
+      const solved = await solvedProblem(probId, expertAddress);
+    } else {
+      console.log("data missing");
+    }
   };
-  const handleUnSolverProblem = () => {
-    console.log("ba");
+  const handleUnSolverProblem = async () => {
+    const probId = getNumberFromName(chatGroup?.name);
+    if (probId) {
+      const unsolved = await unSolvedProblem(probId);
+    } else {
+      console.log("data missing");
+    }
   };
   // scroll to bottom of chat box
   useEffect(() => {
@@ -34,6 +42,20 @@ const ChatUi = ({ chatGroup, messages, handleSubmit }) => {
 
     boxRef.current.scrollTop = boxRef.current.scrollHeight;
   }, [messages]);
+  // get expert addrress:
+  const expertAddress = (chatGroup?.members || []).find(
+    ({ _id }) => _id !== chatGroup?.ownerId
+  )?.address;
+  // get problem ID
+  function getNumberFromName(name) {
+    var words = name?.split(" ") || "";
+    var lastWord = words[words.length - 1]?.trim();
+    if (/^\d+$/.test(lastWord)) {
+      return parseInt(lastWord);
+    } else {
+      return null;
+    }
+  }
 
   return (
     <div className={styles.Container}>
