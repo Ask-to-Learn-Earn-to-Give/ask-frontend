@@ -10,7 +10,7 @@
     border-radius: 20px;
     padding: 4rem;
     background-color: var(--text-background);
-    max-height: 1200px;
+    max-height: 1100px;
     overflow-y: scroll;
 }
 
@@ -19,6 +19,8 @@
     cursor: pointer;
     transition: all .3s ease-in;
     border-radius: 1rem;
+    width: 280px;
+    max-height: 450px;
     border: 1px solid var(--icons-color);
     background-color: var(--background);
 }

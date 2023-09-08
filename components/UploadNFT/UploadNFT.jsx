@@ -1,9 +1,5 @@
 import React, { useState, useContext } from "react";
-import { MdOutlineHttp, MdOutlineAttachFile } from "react-icons/md";
-import { FaPercent } from "react-icons/fa";
-import { AiTwotonePropertySafety } from "react-icons/ai";
-import { TiTick } from "react-icons/ti";
-import Image from "next/image";
+
 import { useRouter } from "next/router";
 //INTERNAL IMPORT
 import Style from "./UploadNFT.module.css";
@@ -12,17 +8,22 @@ import images from "../../img";
 import { Button } from "../../components/componentsindex";
 import { DropZone } from "../UploadNFT/uploadNFTindex";
 
-const UloadNFT = ({ uploadToIPFS, createNFT }) => {
+const UloadNFT = ({ uploadToIPFS, mintNft, chatGroup }) => {
   const [quantity, setQuantity] = useState(0);
-  const [active, setActive] = useState(0);
+  const [price, setPrice] = useState(0);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [fileSize, setFileSize] = useState("");
   const [category, setCategory] = useState(0);
   const [properties, setProperties] = useState("");
   const [image, setImage] = useState(null);
   const router = useRouter();
-
+  //
+  // mint NFTCard
+  const handleMintNft = async () => {
+    if (!quantity || !name || !image || !chatGroup?._id || !price) {
+      console.log("data missing");
+    } else mintNft(quantity, name, image, chatGroup?._id, price);
+  };
   return (
     <div className={Style.upload}>
       <DropZone
@@ -31,12 +32,11 @@ const UloadNFT = ({ uploadToIPFS, createNFT }) => {
         subHeading="or Browse media on your device"
         name={name}
         description={description}
-        fileSize={fileSize}
         category={category}
         properties={properties}
         setImage={setImage}
         uploadToIPFS={uploadToIPFS}
-        createNFT={createNFT}
+        mintNft={mintNft}
       />
 
       <div className={Style.upload_box}>
@@ -70,10 +70,19 @@ const UloadNFT = ({ uploadToIPFS, createNFT }) => {
             onChange={(e) => setQuantity(e.target.value)}
           />
         </div>
+        <div className={formStyle.Form_box_input}>
+          <label htmlFor="nft">Price</label>
+          <input
+            type="number"
+            placeholder="Price "
+            className={formStyle.Form_box_input_userName}
+            onChange={(e) => setPrice(e.target.value)}
+          />
+        </div>
         <div className={Style.upload_box_btn}>
           <Button
             btnName="Create NFT"
-            handleClick={async () => {}}
+            handleClick={handleMintNft}
             classStyle={Style.upload_box_btn_style}
           />
         </div>

@@ -5,6 +5,6 @@ export const ProblemSolverAddress =
 export const ProblemSolverABI = problemSolver;
 // mint nft
 import mintNft from "../ABI/MintNft.json";
-export const mintNftAddress = "0x28AEfdbD3b7deBFA9A44De5790f1cC6f6e5f63Cb";
+export const mintNftAddress = "0x6BD671367E5009Eb99f9970f15a159eA45D747CD";
 export const mintNftABI = mintNft;
 // mint nft

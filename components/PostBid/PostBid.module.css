@@ -11,8 +11,8 @@
   .comment{
     margin: 1rem 0rem;
     background-color: var(--main-bg-color);
-    border: 1px solid var(--icons-color);
-    border-radius: 20px;
+    /* border: 1px solid var(--icons-color); */
+    border-radius: 10px;
     padding: 1rem 2rem;
 
   }
@@ -24,7 +24,7 @@
   .post_bid{
     margin: 3rem 0rem;
     padding-bottom: 3rem;
-    border-bottom: 1px dashed var(--icons-color);
+    /* border-bottom: 1px dashed var(--icons-color); */
   }
 .commentBox_button {
     width: 100%;
@@ -61,7 +61,7 @@ border-radius: 100%;
     margin: 1rem 1rem;
     border-radius: 20px;
     padding: 2rem;
-    border: 1px dashed var(--icons-color);
+    /* border: 1px dashed var(--icons-color); */
     white-space: pre-wrap;
 }
 .textarea_container textarea {

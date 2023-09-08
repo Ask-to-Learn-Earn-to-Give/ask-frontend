@@ -3,7 +3,7 @@
     margin: 0 auto;
     font-family: Arial, sans-serif;
     overflow-wrap: break-word;
-    border-bottom: 1px dashed;
+    /* border-bottom: 1px dashed; */
   }
 
   .header h1{
@@ -30,7 +30,7 @@
 
   }
   .header {
-    border-bottom: 1px dashed;
+    /* border-bottom: 1px dashed; */
     margin-bottom: 3rem;
   }
   .body{

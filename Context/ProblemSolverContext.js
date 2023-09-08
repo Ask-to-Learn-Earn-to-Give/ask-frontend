@@ -3,6 +3,7 @@ import Web3Modal from "web3modal";
 import { ethers } from "ethers";
 import Router from "next/router";
 import axios, { addTokenToAxios } from "../lib/axios";
+import NormalAxios from "axios";
 import { useRouter } from "next/router";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import {
@@ -396,10 +397,10 @@ export const ProblemSolverProvider = ({ children }) => {
   // -----------------------------------MINT NFT ------------------------
   // -----------------------------------MINT NFT ------------------------
   // -----------------------------------MINT NFT ------------------------
-  const mintNft = async (count, name, image, price, key) => {
-    if (!count || !name || !image || !price || !key)
+  const mintNft = async (count, name, image, key, price) => {
+    if (!count || !name || !image || !key || !price)
       console.log("data missing");
-    const data = JSON.stringify({ name, image, price, key });
+    const data = JSON.stringify({ name, image, key, price });
     try {
       const added = await client.add(data);
       const tokenURI = `${subdomain}/ipfs/${added.path}`;
@@ -416,6 +417,42 @@ export const ProblemSolverProvider = ({ children }) => {
       const contract = await connectingWithSmartContractMint();
       const transaction = await contract.getNFTInfo(tokenId);
       await transaction.wait();
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  const getMyNft = async () => {
+    try {
+      const contract = await connectingWithSmartContractMint();
+      const data = await contract.getMyNFTs();
+      const items = await Promise.all(
+        data.map(async ({ tokenId, tokenURI }) => {
+          try {
+            const tokenURIs = await contract.tokenURI(tokenId);
+            const {
+              data: { name, image, key, price },
+            } = await NormalAxios.get(tokenURIs);
+
+            // Ensure IPFS data is available
+            if (!name || !image || !key) {
+              console.log(`Error fetching IPFS data for NFT ${tokenId}`);
+              return null;
+            }
+
+            return {
+              tokenId: tokenId.toString(),
+              name,
+              image,
+              key,
+              price: price.toString(),
+            };
+          } catch (error) {
+            console.log(`Error fetching data for NFT ${tokenId}:`, error);
+            return null;
+          }
+        })
+      );
+      return items;
     } catch (error) {
       console.log("error", error);
     }
@@ -443,6 +480,7 @@ export const ProblemSolverProvider = ({ children }) => {
         getNftInfo,
         solvedProblem,
         unSolvedProblem,
+        getMyNft,
       }}
     >
       {children}
