@@ -5,8 +5,6 @@ import axios from "../../lib/axios";
 import Style from "./NFTCardTwo.module.css";
 import Link from "next/link";
 const NFTCardTwo = ({ NFTData, setMessages, setChatGroup }) => {
-  console.log("nftdata", NFTData);
-
   const fetchData = async (_id) => {
     const { messages } = (
       await axios.get(`/api/chat/${_id}/messages?skip=0&limit=1024`)

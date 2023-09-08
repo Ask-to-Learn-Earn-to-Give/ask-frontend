@@ -59,7 +59,7 @@ const PropCard = ({ PropData }) => {
                         <p>{el.title}</p>
                       </div>
                       <div className={Style.PropCard_box_detail_description}>
-                        <p>{el.expertDescription}</p>
+                        <p>{el.description}</p>
                       </div>
                     </div>
                   </div>
