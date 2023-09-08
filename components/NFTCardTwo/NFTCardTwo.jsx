@@ -45,7 +45,7 @@ const NFTCardTwo = ({ NFTData, setMessages, setChatGroup }) => {
                 </div>
                 <div className={Style.NFTCardTwo_box_info_info}>
                   <div className={Style.NFTCardTwo_box_info_info_id}>
-                    <p>Askify# {el.tokenId?.slice(0, 4)}</p>
+                    <p>Askify# {el?.tokenId?.slice(0, 4)}</p>
                   </div>
                   <div className={Style.NFTCardTwo_box_info_info_expert}>
                     {/* <p>
