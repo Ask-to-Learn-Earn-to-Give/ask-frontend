@@ -10,13 +10,13 @@ const Discover = ({ currentAccount }) => {
   const discover = [
     {
       name: "Discovery",
-      link: "problems",
+      link: "/problems",
       protect: "problems",
     },
 
     {
       name: "Create Question",
-      link: "problems/create",
+      link: "/problems/create",
       protect: "connectWallet",
     },
     {
@@ -27,7 +27,7 @@ const Discover = ({ currentAccount }) => {
 
     {
       name: "Connect Wallet",
-      link: "connectWallet",
+      link: "/connectWallet",
       protect: "connectWallet",
     },
   ];

@@ -37,7 +37,7 @@ const Form = ({ fileUrl }) => {
       avatarUrl: fileUrl || undefined,
     });
 
-    window.location.reload();
+    window.location.href = "/";
   };
 
   return (
